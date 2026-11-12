@@ -1,8 +1,41 @@
-<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#b7d9f4"><title>书间 · 我的阅读书房</title><link rel="stylesheet" href="style.css?v=2"><body>
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#168df1"><title>书间 · 我的阅读书房</title><link rel="stylesheet" href="style.css?v=3"><body>
 <header><a class="brand" href="#">书间<span>BOOKS / 私人阅读书房</span></a><button id="add" class="primary">＋ 添加书籍</button></header>
-<main><section class="hero"><div><small>LET THE PAGES FIND YOU</small><h1>在书页之间，<br>遇见更大的世界。</h1><p>读诗，读历史，也读自己。让每一次阅读都有迹可循。</p><button id="resume" class="primary">开始一段阅读 ↗</button></div><div class="quote"><span>我的私人藏书</span><strong id="count">58</strong><p>本书 · 一间随身的书房</p><i>「把读过的日子，留在这里。」</i></div></section>
-<section id="shelf"><div class="sectionhead"><div><small>YOUR COLLECTION</small><h2>我的书架</h2></div><input id="search" type="search" placeholder="搜索书名、作者、简介…" aria-label="搜索书籍"></div><div id="filters"></div><div class="toolbar"><span id="resultCount"></span><select id="statusFilter" aria-label="阅读状态"><option value="">全部阅读状态</option><option value="unread">未开始</option><option value="reading">阅读中</option><option value="done">已读完</option></select></div><div id="grid"></div></section>
+<main><section class="hero"><div><small>LET THE PAGES FIND YOU</small><h1>在书页之间，<br>遇见更大的世界。</h1><p>读诗，读历史，也读自己。让每一次阅读都有迹可循。</p><div class="heroactions"><button id="resume" class="primary">开始一段阅读 ↗</button><button id="englishShortcut">英文听读练习 →</button></div></div><div class="quote"><span>我的私人藏书</span><strong id="count">58</strong><p>本书 · 一间随身的书房</p><i>「把读过的日子，留在这里。」</i></div></section>
+<section id="shelf"><div class="sectionhead"><div><small>YOUR COLLECTION</small><h2>我的书架</h2></div><input id="search" type="search" placeholder="搜索书名、作者、简介…" aria-label="搜索书籍"></div><div id="filters"></div><div class="toolbar"><span id="resultCount"></span><select id="availabilityFilter" aria-label="内容可用性"><option value="">全部书籍</option><option value="direct">可直接阅读</option><option value="external">尚未接入全文</option></select><select id="statusFilter" aria-label="阅读状态"><option value="">全部阅读状态</option><option value="unread">未开始</option><option value="reading">阅读中</option><option value="done">已读完</option></select></div><div id="grid"></div></section>
 </main><footer><span>书间 BOOKS · 一页一页，慢慢来。</span><details class="backup"><summary>备份与恢复</summary><div><button id="export">导出备份</button><label class="button">恢复备份<input id="restore" type="file" accept="application/json" hidden></label><p>备份包含私人读后感，请妥善保管。</p></div></details></footer>
 <dialog id="detail"><div class="modalhead"><span>书籍详情</span><button data-close="detail" aria-label="关闭">×</button></div><div id="detailBody"></div></dialog>
 <dialog id="addDialog"><div class="modalhead"><h2>添加到我的书架</h2><button data-close="addDialog">×</button></div><form id="addForm"><label>书名<input name="title" required maxlength="200"></label><label>作者 / 译者<input name="author" required maxlength="200"></label><label>板块<select name="category" id="categorySelect"></select></label><label>简介<textarea name="description" required></textarea></label><label>推荐理由<textarea name="recommendation"></textarea></label><button class="primary">添加书籍</button></form></dialog>
-<dialog id="reader"><div class="readerhead"><button id="readerBack">← 返回书架</button><strong id="readerTitle"></strong><select id="chapterSelect" aria-label="选择章节"></select><button id="readerNote">写读后感</button><select id="fontSize" aria-label="字体大小"><option value="18">小字</option><option value="21" selected>中字</option><option value="25">大字</option></select><span id="progress"></span></div><article id="readerText"></article></dialog><div id="toast" role="status"></div><script src="catalog.js"></script><script src="reading.js?v=2"></script><script src="app.js?v=2"></script></body></html>
+<dialog id="reader"><div class="readerhead"><button id="readerBack">← 返回书架</button><strong id="readerTitle"></strong><select id="chapterSelect" aria-label="选择章节"></select><button id="readerNote">写读后感</button><select id="fontSize" aria-label="字体大小"><option value="18">小字</option><option value="21" selected>中字</option><option value="25">大字</option></select><span id="progress"></span></div><div id="speechControls" hidden><button id="speak" class="primary">▶ 朗读本章</button><button id="pauseSpeech">暂停 / 继续</button><button id="stopSpeech">停止</button><label>语速 <select id="speechRate"><option value="0.7">0.7× 慢速</option><option value="0.85">0.85×</option><option value="1" selected>1× 常速</option></select></label><span id="speechHint">浏览器合成语音 · 可点击正文段落从此处听起</span></div><article id="readerText"></article></dialog><div id="toast" role="status"></div><script src="catalog.js"></script><script src="reading.js?v=3"></script>
+<script src="readings/en003-0.js?v=3"></script>
+<script src="readings/en003-1.js?v=3"></script>
+<script src="readings/en003-2.js?v=3"></script>
+<script src="readings/en003-3.js?v=3"></script>
+<script src="readings/en003-4.js?v=3"></script>
+<script src="readings/en004-0.js?v=3"></script>
+<script src="readings/en004-1.js?v=3"></script>
+<script src="readings/en004-2.js?v=3"></script>
+<script src="readings/en004-3.js?v=3"></script>
+<script src="readings/en005-0.js?v=3"></script>
+<script src="readings/en005-1.js?v=3"></script>
+<script src="readings/en005-2.js?v=3"></script>
+<script src="readings/en005-3.js?v=3"></script>
+<script src="readings/en005-4.js?v=3"></script>
+<script src="readings/en005-5.js?v=3"></script>
+<script src="readings/en006-0.js?v=3"></script>
+<script src="readings/en006-1.js?v=3"></script>
+<script src="readings/en006-2.js?v=3"></script>
+<script src="readings/en006-3.js?v=3"></script>
+<script src="readings/en006-4.js?v=3"></script>
+<script src="readings/en006-5.js?v=3"></script>
+<script src="readings/en006-6.js?v=3"></script>
+<script src="readings/en006-7.js?v=3"></script>
+<script src="readings/en006-8.js?v=3"></script>
+<script src="readings/en006-9.js?v=3"></script>
+<script src="readings/en006-10.js?v=3"></script>
+<script src="readings/en006-11.js?v=3"></script>
+<script src="readings/en001-0.js?v=3"></script>
+<script src="readings/en002-0.js?v=3"></script>
+<script src="readings/en002-1.js?v=3"></script>
+<script src="readings/en002-2.js?v=3"></script>
+<script src="poetry-guides.js?v=3"></script>
+<script src="app.js?v=3"></script></body></html>

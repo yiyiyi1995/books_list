@@ -6,7 +6,7 @@ let state = {books:[],deleted:[],notes:{},texts:{},positions:{},statuses:{},exte
 let revision = 0, server = false, category = '', current = null, readingId = null, chapterIndex = 0;
 let saveQueue = Promise.resolve(), restoring = false, scrollTimer, noteTimer;
 const categories = [...new Set(INITIAL_CATALOG.books.map(b => b.category))];
-const colors = ['#bedcf1','#d0e6f4','#c7d9ef','#d4e3f4','#b7d9ea','#cedef0','#bfdef4'];
+const colors = ['#83cbff','#a5ddff','#9bcbff','#8dd6ff','#b0dcff','#9ed7ff','#a6d0ff','#7bcdff'];
 
 function toast(t) {
   $('#toast').textContent=t; $('#toast').style.display='block';
@@ -62,10 +62,10 @@ function statusLabel(id) {return ({unread:'○ 未开始',reading:'◐ 阅读中
 function render() {
   $('#count').textContent=state.books.length;
   $('#filters').innerHTML=['全部',...categories].map(c=>`<button data-cat="${esc(c==='全部'?'':c)}" class="${category===(c==='全部'?'':c)?'active':''}">${esc(c)}</button>`).join('');
-  const q=$('#search').value.trim().toLowerCase(),status=$('#statusFilter').value;
-  const books=state.books.filter(b=>(!category||b.category===category)&&(!status||(state.statuses[b.id]||'unread')===status)&&[b.title,b.author,b.description].join(' ').toLowerCase().includes(q));
+  const q=$('#search').value.trim().toLowerCase(),status=$('#statusFilter').value,availability=$('#availabilityFilter').value;
+  const books=state.books.filter(b=>(!category||b.category===category)&&(!availability||(availability==='direct'?hasText(b.id):!hasText(b.id)))&&(!status||(state.statuses[b.id]||'unread')===status)&&[b.title,b.author,b.description].join(' ').toLowerCase().includes(q));
   $('#resultCount').textContent=`共 ${books.length} 本 · ${category||'全部板块'}`;
-  $('#grid').innerHTML=books.map(b=>`<article class="card"><div class="cardtop"><div class="cover" aria-hidden="true" style="--cover:${colors[Math.max(0,categories.indexOf(b.category))%colors.length]}">${esc(b.title)}</div><div><span class="tag">${esc(b.category)}</span><h3>${esc(b.title)}</h3><div class="author">${esc(b.author)}</div><span class="readbadge">${hasText(b.id)?'站内原文阅读':'正版平台查找'}</span></div></div><p class="desc">${esc(b.description)}</p><div class="rec">推荐读法 · ${esc(b.recommendation||'从你感兴趣的章节开始。')}</div>${state.positions[b.id]?`<p class="progressline">${esc(progressLabel(b.id))}</p>`:''}<div class="cardfoot"><span>${statusLabel(b.id)}${state.notes[b.id]?.text?' · 已有读后感':''}</span><div class="cardbuttons"><button data-book="${esc(b.id)}">详情 / 读后感</button><button class="primary" data-read="${esc(b.id)}">${hasText(b.id)?(state.positions[b.id]?'继续阅读':'直接阅读'):'查找正版 ↗'}</button><button class="danger" data-delete="${esc(b.id)}" aria-label="删除《${esc(b.title)}》">删除</button></div></div></article>`).join('')||'<div class="empty">这里还没有符合条件的书。</div>';
+  $('#grid').innerHTML=books.map(b=>`<article class="card"><div class="cardtop"><div class="cover" aria-hidden="true" style="--cover:${colors[Math.max(0,categories.indexOf(b.category))%colors.length]}">${esc(b.title)}</div><div><span class="tag">${esc(b.category)}</span><h3>${esc(b.title)}</h3><div class="author">${esc(b.author)}</div><span class="readbadge">${hasText(b.id)?'站内原文阅读':'尚未接入全文'}</span></div></div><p class="desc">${esc(b.description)}</p><div class="rec">推荐读法 · ${esc(b.recommendation||'从你感兴趣的章节开始。')}</div>${state.positions[b.id]?`<p class="progressline">${esc(progressLabel(b.id))}</p>`:''}<div class="cardfoot"><span>${statusLabel(b.id)}${state.notes[b.id]?.text?' · 已有读后感':''}</span><div class="cardbuttons"><button data-book="${esc(b.id)}">详情 / 读后感</button><button class="primary" data-read="${esc(b.id)}">${hasText(b.id)?(state.positions[b.id]?'继续阅读':'直接阅读'):'查找正版 ↗'}</button><button class="danger" data-delete="${esc(b.id)}" aria-label="删除《${esc(b.title)}》">删除</button></div></div></article>`).join('')||'<div class="empty">这里还没有符合条件的书。</div>';
   const last=state.books.find(b=>b.id===state.lastBook);
   $('#resume').textContent=last?'继续阅读《'+last.title+'》 ↗':'开始一段阅读 ↗';
 }
@@ -92,7 +92,7 @@ function detail(id,focusNote=false) {
   current=state.books.find(b=>b.id===id); if(!current)return;
   const b=current,n=state.notes[id],available=hasText(id),bookmark=state.externalBookmarks[id]||'';
   clearTimeout(noteTimer);
-  $('#detailBody').innerHTML=`<span class="tag">${esc(b.category)}</span><h2>${esc(b.title)}</h2><p>${esc(b.author)}</p><h3>关于这本书</h3><p>${esc(b.description)}</p><h3>推荐读法</h3><p>${esc(b.recommendation||'按自己的节奏阅读。')}</p><div class="sourcebox"><strong>${available?'可以直接阅读':'前往正版平台查找'}</strong><p class="sourcehint">${state.texts[id]?'你之前保存的正文仍可继续阅读。':PUBLIC[id]?'已内置古典诗词原文，无需导入。'+esc(PUBLIC[id].label)+'。原文库与指定出版版本的目录、用字可能不同，不包含现代注释、译文或赏析。':'本书尚无站内授权全文。点击下方按钮在微信读书按书名查找；是否上架及可读范围由平台决定，可能需要登录或购买。外部阅读进度由该平台保存，本应用无法读取。'}</p><div class="actions"><button id="read" class="primary">${available?(state.positions[id]?'继续上次位置':'直接阅读原文'):'去微信读书查找 ↗'}</button><button id="deleteBook" class="danger">删除此书</button></div>${available?`<p class="progressline">${esc(progressLabel(id)||'开始阅读后会自动记住章节与段落位置。')}</p>`:`<label class="sourcehint">我的阅读书签（可选）<input id="externalBookmark" placeholder="例如：第三章，第 42 页" value="${esc(bookmark)}" maxlength="300"></label>`}</div><label>阅读状态 <select id="bookStatus">${[['unread','未开始'],['reading','阅读中'],['done','已读完']].map(([v,t])=>`<option value="${v}" ${(state.statuses[id]||'unread')===v?'selected':''}>${t}</option>`).join('')}</select></label><h3 id="noteHeading">这本书的读后感</h3><textarea id="noteText" placeholder="记下触动你的句子、想法，以及它与你的联系…">${esc(n?.text||'')}</textarea><div class="actions"><button id="saveNote" class="primary">保存读后感</button><span id="noteHint" class="author">${n?'上次保存：'+new Date(n.updated).toLocaleString():'写在这里，会自动保存'}</span></div>`;
+  $('#detailBody').innerHTML=`<span class="tag">${esc(b.category)}</span><h2>${esc(b.title)}</h2><p>${esc(b.author)}</p><h3>关于这本书</h3><p>${esc(b.description)}</p><h3>推荐读法</h3><p>${esc(b.recommendation||'按自己的节奏阅读。')}</p><div class="sourcebox"><strong>${available?'可以直接阅读':'前往正版平台查找'}</strong><p class="sourcehint">${state.texts[id]?'你之前保存的正文仍可继续阅读。':PUBLIC[id]?(PUBLIC[id].language==='en'?'已内置英文原版全文，可直接阅读，并使用浏览器英语合成语音分段听读。语言难度是编辑建议，不是官方分级。':'已内置简体古典原文，无需导入。'+esc(PUBLIC[id].label)+'。逐篇提供关键词释义和导读，其中部分篇目有原创释义赏析；辅助导读不等同于逐句白话译文。原文库不包含出版社现代注释。'):'本书尚无站内授权全文。点击下方按钮在微信读书按书名查找；是否上架及可读范围由平台决定，可能需要登录或购买。外部阅读进度由该平台保存，本应用无法读取。'}</p><div class="actions"><button id="read" class="primary">${available?(state.positions[id]?'继续上次位置':'直接阅读原文'):'去微信读书查找 ↗'}</button><button id="deleteBook" class="danger">删除此书</button></div>${available?`<p class="progressline">${esc(progressLabel(id)||'开始阅读后会自动记住章节与段落位置。')}</p>`:`<label class="sourcehint">我的阅读书签（可选）<input id="externalBookmark" placeholder="例如：第三章，第 42 页" value="${esc(bookmark)}" maxlength="300"></label>`}</div><label>阅读状态 <select id="bookStatus">${[['unread','未开始'],['reading','阅读中'],['done','已读完']].map(([v,t])=>`<option value="${v}" ${(state.statuses[id]||'unread')===v?'selected':''}>${t}</option>`).join('')}</select></label><h3 id="noteHeading">这本书的读后感</h3><textarea id="noteText" placeholder="记下触动你的句子、想法，以及它与你的联系…">${esc(n?.text||'')}</textarea><div class="actions"><button id="saveNote" class="primary">保存读后感</button><span id="noteHint" class="author">${n?'上次保存：'+new Date(n.updated).toLocaleString():'写在这里，会自动保存'}</span></div>`;
   $('#bookStatus').onchange=async e=>{state.statuses[id]=e.target.value;await persist();render();};
   const captureNote=()=>{state.notes[id]={text:$('#noteText').value,updated:new Date().toISOString()};};
   const saved=async()=>{if(await persist()){if(current?.id===id&&$('#noteHint'))$('#noteHint').textContent='已保存 · '+new Date().toLocaleTimeString();render();}};
@@ -109,7 +109,7 @@ $('#detail').addEventListener('close',()=>{clearTimeout(noteTimer);persist();ren
 
 function readerPosition() {
   if(!readingId)return null;
-  const r=$('#reader'),top=$('.readerhead').getBoundingClientRect().bottom;
+  const r=$('#reader'),top=readingTop();
   const paragraphs=[...$('#readerText').querySelectorAll('[data-para]')];
   const p=paragraphs.find(p=>p.getBoundingClientRect().bottom>top)||paragraphs[paragraphs.length-1];
   const rect=p?.getBoundingClientRect();
@@ -120,20 +120,24 @@ function restorePosition(p) {
   const r=$('#reader');restoring=true;
   requestAnimationFrame(()=>{
     const para=p&&$('#readerText').querySelector(`[data-para="${Number(p.paragraph)||0}"]`);
-    if(para&&p.chapter){const top=$('.readerhead').getBoundingClientRect().bottom,rect=para.getBoundingClientRect();r.scrollTop+=rect.top-top+(p.fraction||0)*rect.height;}
+    if(para&&p.chapter){const top=readingTop(),rect=para.getBoundingClientRect();r.scrollTop+=rect.top-top+(p.fraction||0)*rect.height;}
     else r.scrollTop=p?.offset||0;
     requestAnimationFrame(()=>{restoring=false;updateProgress();capturePosition();persist();render();});
   });
 }
 function paintChapter(index,p=null) {
+  stopReadingSpeech();
   const chapters=bookChapters(readingId);chapterIndex=Math.max(0,Math.min(index,chapters.length-1));
   const c=chapters[chapterIndex],body=$('#readerText');body.replaceChildren();
   const heading=document.createElement('h2');heading.textContent=c.title;body.append(heading);
   if(c.author){const author=document.createElement('p');author.className='chapter-author';author.textContent=c.author;body.append(author);}
-  const paragraphs=c.text.split(/\n\s*\n/).flatMap(t=>t.match(/[\s\S]{1,400}/g)||[]);
-  paragraphs.forEach((t,i)=>{const el=document.createElement('p');el.dataset.para=i;el.textContent=t;body.append(el);});
+  const english=PUBLIC[readingId]?.language==='en';
+  $('#speechControls').hidden=!english;
+  const paragraphs=chunkParagraphs(c.text,english);
+  paragraphs.forEach((t,i)=>{const el=document.createElement('p');el.dataset.para=i;el.textContent=t;if(english){el.lang='en';el.title='点击从这一段开始朗读';el.onclick=()=>startReadingSpeech(i);}body.append(el);});
+  const study=makeStudyPanel(readingId,c,paragraphs.length);if(study)body.append(study);
   const source=document.createElement('div');source.id='readerSource';
-  if(PUBLIC[readingId]&&!state.texts[readingId]) source.innerHTML=`${esc(PUBLIC[readingId].label)}<br>原文数据：<a class="textlink" href="https://github.com/chinese-poetry/chinese-poetry" target="_blank" rel="noopener noreferrer">chinese-poetry</a> · MIT 授权。未包含现代注释、译文与赏析。<br>第 ${chapterIndex+1} / ${chapters.length} 篇`;
+  if(PUBLIC[readingId]&&!state.texts[readingId]) {const book=PUBLIC[readingId];source.innerHTML=`${esc(book.label)}<br>文本来源：<a class="textlink" href="${esc(book.source)}" target="_blank" rel="noopener noreferrer">${book.language==='en'?(book.source.includes('github.com')?'GitHub · Standard Ebooks':'Project Gutenberg'):'chinese-poetry'}</a> · ${esc(book.license)}。<br>第 ${chapterIndex+1} / ${chapters.length} 篇${book.language==='en'?' · 英语原版，合成语音并非真人录音':' · 简体原文；导读不是所选出版社注本'}`;}
   else source.textContent='之前保存的私人正文';
   body.append(source);
   const controls=document.createElement('div');controls.className='actions';
@@ -175,7 +179,8 @@ async function sync() {
     if(await persist()){render();if(n)toast('书架新增 '+n+' 本书');}
   }catch{ /* Keep the shelf available when a remote update is unavailable. */ }
 }
-$('#search').oninput=render;$('#statusFilter').onchange=render;
+$('#search').oninput=render;$('#statusFilter').onchange=render;$('#availabilityFilter').onchange=render;
+$('#englishShortcut').onclick=()=>{category='英语 · 口语听力阅读';$('#search').value='';$('#statusFilter').value='';$('#availabilityFilter').value='direct';render();$('#shelf').scrollIntoView({behavior:'smooth'});};
 $('#filters').onclick=e=>{if(e.target.dataset.cat!==undefined){category=e.target.dataset.cat;render();}};
 document.addEventListener('click',e=>{
   const del=e.target.closest('[data-delete]');if(del)return removeBook(del.dataset.delete);
@@ -188,7 +193,7 @@ $('#add').onclick=()=>$('#addDialog').showModal();
 $('#addForm').onsubmit=async e=>{
   e.preventDefault();const b=Object.fromEntries(new FormData(e.target));for(const k in b)b[k]=b[k].trim();
   b.id='custom-'+(crypto.randomUUID?crypto.randomUUID():Date.now());if(!validBook(b))return toast('请填写书名、作者和简介');
-  state.books.push(b);if(await persist()){e.target.reset();$('#addDialog').close();category='';$('#search').value='';$('#statusFilter').value='';render();toast('已加入书架');}
+  state.books.push(b);if(await persist()){e.target.reset();$('#addDialog').close();category='';$('#search').value='';$('#statusFilter').value='';$('#availabilityFilter').value='';render();toast('已加入书架');}
 };
 $('#resume').onclick=()=>{const b=state.books.find(x=>x.id===state.lastBook)||state.books.find(x=>hasText(x.id))||state.books[0];if(b)openReader(b.id);else toast('请先添加一本书');};
 $('#export').onclick=()=>{
@@ -214,3 +219,64 @@ async function init() {
   }catch(e){toast(e.message);render();}
 }
 init();
+
+function chunkParagraphs(text,english) {
+  const out=[];
+  for(let paragraph of text.split(/\n\s*\n/)) {
+    if(english)paragraph=paragraph.replace(/\s+/g,' ').trim();
+    while(paragraph.length>400) {
+      let end=400;
+      if(english){const candidate=paragraph.lastIndexOf(' ',400);if(candidate>200)end=candidate;}
+      out.push(paragraph.slice(0,end));paragraph=paragraph.slice(end);
+    }
+    if(paragraph)out.push(paragraph);
+  }
+  return out;
+}
+function readingTop() {
+  const top=$('.readerhead').getBoundingClientRect().bottom,controls=$('#speechControls');
+  return !controls.hidden&&getComputedStyle(controls).position==='sticky'?Math.max(top,controls.getBoundingClientRect().bottom):top;
+}
+function makeStudyPanel(id,chapter,index) {
+  const english=PUBLIC[id]?.language==='en',guide=window.POETRY_GUIDES?.[id]?.[chapter.id];
+  if(!english&&!guide)return null;
+  const section=document.createElement('section');section.className='study';section.dataset.para=index;
+  if(english) {
+    section.innerHTML=`<h3>听 · 读 · 说：把这一章变成口语练习</h3><p>先用 0.7× 或 0.85× 听一小段，试着抓住人物、动作和结果；再对照原文跟读。可以点击任意正文段落，从那里听起。</p><h4>口语复述</h4><p>What happened in this chapter? What did the character want? What would you do differently?</p><h4>练习方法</h4><p>选出 3 个你想复用的词组，逐个换一个情境造句。然后合上原文，用 First… / Then… / In the end… 作 30–60 秒复述。</p><p class="guide-notice">这里使用设备 / 浏览器的英语合成语音，不是真人有声书，也不提供发音评分。古典原著可能包含旧词、方言和双关；现代口语练习优先选清楚自然的对话，不必照搬全部句式。</p>`;
+  } else {
+    section.innerHTML=`<h3>${esc(guide.heading)}</h3>${guide.notice?`<p class="guide-notice">${esc(guide.notice)}</p>`:''}<h4>${guide.kind==='editorial'?'这首诗词的含义':'含义与理解线索'}</h4><p>${esc(guide.meaning)}</p><h4>关键词与古今词义</h4><dl>${guide.glosses.map(g=>`<dt>${esc(g.word)}</dt><dd>${esc(g.meaning)}</dd>`).join('')}</dl><h4>${guide.kind==='editorial'?'表达与赏析':'赏析读法'}</h4><p>${esc(guide.appreciation)}</p><h4>怎样理解和运用</h4><p>${esc(guide.usage)}</p><p class="guide-notice">书间原创学习辅助内容，不是金性尧等注家的注释；不同解读应回到原文检验。</p>`;
+  }
+  return section;
+}
+let speechRun=0,speakingParagraph=0,speechActive=false;
+function stopReadingSpeech() {
+  speechRun++;speechActive=false;
+  if('speechSynthesis'in window)window.speechSynthesis.cancel();
+  document.querySelectorAll('.speaking').forEach(p=>p.classList.remove('speaking'));
+  if($('#speechHint'))$('#speechHint').textContent='浏览器合成语音 · 可点击正文段落从此处听起';
+}
+function startReadingSpeech(start=0) {
+  if(!('speechSynthesis'in window)||typeof SpeechSynthesisUtterance==='undefined'){toast('当前浏览器不支持朗读，请使用支持语音合成的浏览器');return;}
+  if(!$('#reader').open||PUBLIC[readingId]?.language!=='en')return;
+  stopReadingSpeech();const run=speechRun,paragraphs=[...$('#readerText').querySelectorAll('p[data-para]')];
+  let index=Math.max(0,start);speechActive=true;
+  function next() {
+    if(run!==speechRun||!$('#reader').open)return;
+    if(index>=paragraphs.length){speechActive=false;$('#speechHint').textContent='本章朗读结束，试着用自己的话复述。';return;}
+    const p=paragraphs[index];speakingParagraph=index;
+    document.querySelectorAll('.speaking').forEach(x=>x.classList.remove('speaking'));p.classList.add('speaking');
+    $('#reader').scrollTop+=p.getBoundingClientRect().top-readingTop()-12;capturePosition();persist();
+    const u=new SpeechSynthesisUtterance(p.textContent);u.lang='en-US';u.rate=Number($('#speechRate').value);
+    const voices=window.speechSynthesis.getVoices();const voice=voices.find(v=>/^en[-_]US/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));if(voice)u.voice=voice;
+    $('#speechHint').textContent='合成朗读 · 第 '+(index+1)+' / '+paragraphs.length+' 段';
+    u.onend=()=>{if(run===speechRun){p.classList.remove('speaking');index++;next();}};
+    u.onerror=e=>{if(run===speechRun&&!['canceled','interrupted'].includes(e.error)){speechActive=false;p.classList.remove('speaking');$('#speechHint').textContent='朗读未能启动：请检查设备英语语音或更换浏览器。';}};
+    window.speechSynthesis.speak(u);
+  }
+  next();
+}
+$('#speak').onclick=()=>startReadingSpeech();
+$('#pauseSpeech').onclick=()=>{if(!('speechSynthesis'in window))return;if(!speechActive)return toast('请先开始朗读');if(window.speechSynthesis.paused){window.speechSynthesis.resume();$('#speechHint').textContent='已继续朗读';}else{window.speechSynthesis.pause();$('#speechHint').textContent='已暂停，点击可继续';}};
+$('#stopSpeech').onclick=stopReadingSpeech;
+$('#speechRate').onchange=()=>{if(speechActive)startReadingSpeech(speakingParagraph);};
+$('#reader').addEventListener('close',stopReadingSpeech);

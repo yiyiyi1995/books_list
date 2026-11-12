@@ -39,5 +39,5 @@ class AppTests(unittest.TestCase):
    for _ in range(15):
     subprocess.run([sys.executable,str(p/'scripts/weekly_update.py')],check=True,stdout=subprocess.DEVNULL)
     books=json.loads((p/'catalog.json').read_text())['books'];self.assertEqual(books[:len(original)],original);self.assertEqual(len(books),len({b['id'] for b in books}));self.assertEqual(len(books),len({(b['title'],b['author']) for b in books}))
-   self.assertEqual(len(books),70)
+   self.assertEqual(len(books),len(original)+12)
 if __name__=='__main__':unittest.main()

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "en003",
+    "source": "https://github.com/standardebooks/aesop_fables_v-s-vernon-jones",
+    "archive": "https://codeload.github.com/standardebooks/aesop_fables_v-s-vernon-jones/tar.gz/refs/heads/master",
+    "sha256": "10973e26802246ed01fc7f30fd52d9e74d7fa68cbb4ca4416689cb2974302712",
+    "license": "CC0 1.0 / public-domain original",
+    "chapters": 284
+  },
+  {
+    "id": "en004",
+    "source": "https://github.com/standardebooks/lewis-carroll_alices-adventures-in-wonderland_john-tenniel",
+    "archive": "https://codeload.github.com/standardebooks/lewis-carroll_alices-adventures-in-wonderland_john-tenniel/tar.gz/refs/heads/master",
+    "sha256": "78de463ac977dd1078ea6a454bd6c5a545d242d7e1872a1cc9fb12cd4a3af6b6",
+    "license": "CC0 1.0 / public-domain original",
+    "chapters": 13
+  },
+  {
+    "id": "en005",
+    "source": "https://github.com/standardebooks/l-frank-baum_the-wonderful-wizard-of-oz",
+    "archive": "https://codeload.github.com/standardebooks/l-frank-baum_the-wonderful-wizard-of-oz/tar.gz/refs/heads/master",
+    "sha256": "0627d475f34fa123c11c9286a0059c13f1aa7107eccfa9ed666d1b241c792d20",
+    "license": "CC0 1.0 / public-domain original",
+    "chapters": 24
+  },
+  {
+    "id": "en006",
+    "source": "https://github.com/standardebooks/frances-hodgson-burnett_the-secret-garden",
+    "archive": "https://codeload.github.com/standardebooks/frances-hodgson-burnett_the-secret-garden/tar.gz/refs/heads/master",
+    "sha256": "26cda4569a03a5d59cf4b2e26e55babb4ba13ffb5629b01e3e8d56d77da8e8a2",
+    "license": "CC0 1.0 / public-domain original",
+    "chapters": 27
+  },
+  {
+    "id": "en001",
+    "source": "https://www.gutenberg.org/ebooks/14838",
+    "text_url": "https://www.gutenberg.org/cache/epub/14838/pg14838.txt",
+    "sha256": "2bf0e04297038fd97697dfac2b8a2db14f2b80c2012727f7ac0f28cf0b146544",
+    "license": "Project Gutenberg license retained in sources/en001-source.txt",
+    "chapters": 1
+  },
+  {
+    "id": "en002",
+    "source": "https://www.gutenberg.org/ebooks/902",
+    "text_url": "https://www.gutenberg.org/cache/epub/902/pg902.txt",
+    "sha256": "77ae1b3c7be77aea82b1f935e531e53f4df43db572cbc14af39d6cd0d5ba50da",
+    "license": "Project Gutenberg license retained in sources/en002-source.txt",
+    "chapters": 5
+  }
+]

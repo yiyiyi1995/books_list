@@ -464,6 +464,61 @@ window.INITIAL_CATALOG={
       "category": "心灵与中文文学",
       "description": "围绕文明接触、宇宙与人类命运展开科幻叙事。",
       "recommendation": "在情节之外思考文明间的信任与选择。"
+    },
+    {
+      "id": "en001",
+      "title": "The Tale of Peter Rabbit（彼得兔的故事）",
+      "author": "Beatrix Potter",
+      "category": "英语 · 口语听力阅读",
+      "description": "英文短篇入门：小兔子闯入菜园、躲避追赶的故事。篇幅短，动作与生活词汇集中。",
+      "recommendation": "起步建议 A2–B1（编辑估计，非官方分级）。先慢速听一段，再跟读两遍，最后用 first / then / finally 复述。",
+      "language": "en"
+    },
+    {
+      "id": "en003",
+      "title": "Aesop’s Fables（伊索寓言）",
+      "author": "Aesop / V. S. Vernon Jones 译",
+      "category": "英语 · 口语听力阅读",
+      "description": "每则短小、情节完整，适合按天阅读并练习表达观点；这是英文旧译本。",
+      "recommendation": "建议 B1 起读（编辑估计）。每天一则，提取三个动作词，用自己的话解释寓意；部分词汇和句式较古旧。",
+      "language": "en"
+    },
+    {
+      "id": "en005",
+      "title": "The Wonderful Wizard of Oz（绿野仙踪）",
+      "author": "L. Frank Baum",
+      "category": "英语 · 口语听力阅读",
+      "description": "冒险主线清晰，对话丰富，可连续练习理解情节与角色动机。",
+      "recommendation": "建议 B1–B2（编辑估计）。分角色朗读；每章用 Who / What / Why 回答三个问题，再作一分钟复述。",
+      "language": "en"
+    },
+    {
+      "id": "en004",
+      "title": "Alice’s Adventures in Wonderland（爱丽丝梦游仙境）",
+      "author": "Lewis Carroll",
+      "category": "英语 · 口语听力阅读",
+      "description": "以奇幻对话和语言游戏展开的英语原著，适合练习语气和问答表达。",
+      "recommendation": "建议 B1–B2（编辑估计）。日常问答可跟读；双关和维多利亚时代用语不必逐句硬译，不作为现代口语的唯一范本。",
+      "language": "en"
+    },
+    {
+      "id": "en002",
+      "title": "The Happy Prince and Other Tales（快乐王子及其他故事）",
+      "author": "Oscar Wilde",
+      "category": "英语 · 口语听力阅读",
+      "description": "五篇完整童话，以人物对话、描写和情感变化练习文学阅读。",
+      "recommendation": "建议 B1–B2（编辑估计）。先听情节，再读细节；选一小段朗读，复述人物的选择并说出自己的看法。",
+      "language": "en"
+    },
+    {
+      "id": "en006",
+      "title": "The Secret Garden（秘密花园）",
+      "author": "Frances Hodgson Burnett",
+      "category": "英语 · 口语听力阅读",
+      "description": "通过花园与人物关系的变化推进故事，可练习较长篇幅的持续阅读。",
+      "recommendation": "建议 B2 左右（编辑估计）。每章记录人物、事件与感受；注意约克郡方言和古旧表达，不直接照搬为现代日常口语。",
+      "language": "en"
     }
   ]
-};
+}
+;

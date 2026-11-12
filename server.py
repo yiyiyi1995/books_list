@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Local personal library. Python 3 standard library only."""
-import argparse,base64,getpass,hashlib,hmac,http.cookies,json,os,secrets,sqlite3,time,urllib.request
+import argparse,base64,getpass,hashlib,hmac,http.cookies,json,os,secrets,sqlite3,time,urllib.request,re
 from http.server import ThreadingHTTPServer,SimpleHTTPRequestHandler
 from pathlib import Path
 from urllib.parse import parse_qs,urlparse
@@ -48,7 +48,8 @@ class Handler(SimpleHTTPRequestHandler):
     with urllib.request.urlopen(req,timeout=15) as r:catalog=json.load(r)
     return self.reply(200,catalog)
    except Exception:return self.reply(502,{'error':'remote catalog unavailable'})
-  if path not in ['/', '/index.html','/app.js','/style.css','/catalog.js','/catalog.json','/reading.js']:return self.reply(404,{'error':'not found'})
+  reading_asset=bool(re.fullmatch(r'/readings/en[0-9]{3}-[0-9]+\.js',path))
+  if not reading_asset and path not in ['/', '/index.html','/app.js','/style.css','/catalog.js','/catalog.json','/reading.js','/poetry-guides.js','/sources/en001-source.txt','/sources/en002-source.txt']:return self.reply(404,{'error':'not found'})
   return super().do_GET()
  def do_HEAD(self):self.reply(405,{'error':'not supported'})
  def body(self,limit=40*1024*1024):
