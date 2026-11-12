@@ -7,7 +7,9 @@ let revision = 0, server = false, category = '', current = null, readingId = nul
 let saveQueue = Promise.resolve(), restoring = false, scrollTimer, noteTimer;
 const categories = [...new Set(INITIAL_CATALOG.books.map(b => b.category))];
 const colors = ['#83cbff','#a5ddff','#9bcbff','#8dd6ff','#b0dcff','#9ed7ff','#a6d0ff','#7bcdff'];
+const TRASH_ICON='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 10v7M14 10v7"/></svg>';
 
+function updateFilterLabel(){const count=Number(!!$('#availabilityFilter').value)+Number(!!$('#statusFilter').value);const expanded=$('#filterToggle').getAttribute('aria-expanded')==='true';$('#filterToggle').textContent='筛选'+(count?' · '+count:'')+(expanded?' ⌃':' ⌄');$('#filterToggle').classList.toggle('has-active',count>0);}
 function toast(t) {
   $('#toast').textContent=t; $('#toast').style.display='block';
   clearTimeout(toast.timer); toast.timer=setTimeout(()=>$('#toast').style.display='none',4500);
@@ -61,11 +63,13 @@ function progressLabel(id) {
 function statusLabel(id) {return ({unread:'○ 未开始',reading:'◐ 阅读中',done:'● 已读完'})[state.statuses[id]||'unread'];}
 function render() {
   $('#count').textContent=state.books.length;
+  $('#mobileCategory').value=category;
   $('#filters').innerHTML=['全部',...categories].map(c=>`<button data-cat="${esc(c==='全部'?'':c)}" class="${category===(c==='全部'?'':c)?'active':''}">${esc(c)}</button>`).join('');
   const q=$('#search').value.trim().toLowerCase(),status=$('#statusFilter').value,availability=$('#availabilityFilter').value;
+  updateFilterLabel();
   const books=state.books.filter(b=>(!category||b.category===category)&&(!availability||(availability==='direct'?hasText(b.id):!hasText(b.id)))&&(!status||(state.statuses[b.id]||'unread')===status)&&[b.title,b.author,b.description].join(' ').toLowerCase().includes(q)).sort((a,b)=>(!category?categories.indexOf(a.category)-categories.indexOf(b.category):0)||Number(hasText(b.id))-Number(hasText(a.id)));
   $('#resultCount').textContent=`共 ${books.length} 本 · ${category||'全部板块'}`;
-  $('#grid').innerHTML=books.map((b,index)=>`${!category&&(index===0||books[index-1].category!==b.category)?`<div class="category-heading"><h3>${esc(b.category)}</h3><span>${books.filter(x=>x.category===b.category).length} 本 · ${books.filter(x=>x.category===b.category&&hasText(x.id)).length} 本可直接阅读</span></div>`:''}<article class="card"><div class="cardtop"><div class="cover" aria-hidden="true" style="--cover:${colors[Math.max(0,categories.indexOf(b.category))%colors.length]}">${esc(b.title)}</div><div><span class="tag">${esc(b.category)}</span><h3>${esc(b.title)}</h3><div class="author">${esc(b.author)}</div><span class="readbadge">${hasText(b.id)?'站内原文阅读':'尚未接入全文'}</span></div></div><p class="desc">${esc(b.description)}</p><div class="rec">推荐读法 · ${esc(b.recommendation||'从你感兴趣的章节开始。')}</div>${state.positions[b.id]?`<p class="progressline">${esc(progressLabel(b.id))}</p>`:''}<div class="cardfoot"><span>${statusLabel(b.id)}${state.notes[b.id]?.text?' · 已有读后感':''}</span><div class="cardbuttons"><button data-book="${esc(b.id)}">详情 / 读后感</button><button class="primary" data-read="${esc(b.id)}">${hasText(b.id)?(state.positions[b.id]?'继续阅读':'直接阅读'):'查找正版 ↗'}</button><button class="danger" data-delete="${esc(b.id)}" aria-label="删除《${esc(b.title)}》">删除</button></div></div></article>`).join('')||'<div class="empty">这里还没有符合条件的书。</div>';
+  $('#grid').innerHTML=books.map((b,index)=>`${!category&&(index===0||books[index-1].category!==b.category)?`<div class="category-heading"><h3>${esc(b.category)}</h3><span>${books.filter(x=>x.category===b.category).length} 本 · ${books.filter(x=>x.category===b.category&&hasText(x.id)).length} 本可直接阅读</span></div>`:''}<article class="card"><div class="cardtop"><div class="cover" aria-hidden="true" style="--cover:${colors[Math.max(0,categories.indexOf(b.category))%colors.length]}">${esc(b.title)}</div><div><span class="tag">${esc(b.category)}</span><h3><button class="book-title" data-book="${esc(b.id)}">${esc(b.title)}</button></h3><div class="author">${esc(b.author)}</div><span class="readbadge">${hasText(b.id)?'站内原文阅读':'尚未接入全文'}</span></div></div><p class="desc">${esc(b.description)}</p><div class="rec">推荐读法 · ${esc(b.recommendation||'从你感兴趣的章节开始。')}</div>${state.positions[b.id]?`<p class="progressline">${esc(progressLabel(b.id))}</p>`:''}<div class="cardfoot"><span>${statusLabel(b.id)}${state.notes[b.id]?.text?' · 已有读后感':''}</span><div class="cardbuttons"><button data-book="${esc(b.id)}">详情</button><button class="primary" data-read="${esc(b.id)}"><span class="wide-label">${hasText(b.id)?(state.positions[b.id]?'继续阅读':'直接阅读'):'正版 ↗'}</span><span class="compact-label">${hasText(b.id)?(state.positions[b.id]?'继续':'阅读'):'正版 ↗'}</span></button><button class="danger" data-delete="${esc(b.id)}" aria-label="删除《${esc(b.title)}》" title="删除此书">${TRASH_ICON}</button></div></div></article>`).join('')||'<div class="empty">这里还没有符合条件的书。</div>';
   const last=state.books.find(b=>b.id===state.lastBook);
   $('#resume').textContent=last?'继续阅读《'+last.title+'》 ↗':'开始一段阅读 ↗';
 }
@@ -92,7 +96,13 @@ function detail(id,focusNote=false) {
   current=state.books.find(b=>b.id===id); if(!current)return;
   const b=current,n=state.notes[id],available=hasText(id),bookmark=state.externalBookmarks[id]||'';
   clearTimeout(noteTimer);
-  $('#detailBody').innerHTML=`<span class="tag">${esc(b.category)}</span><h2>${esc(b.title)}</h2><p>${esc(b.author)}</p><h3>关于这本书</h3><p>${esc(b.description)}</p><h3>推荐读法</h3><p>${esc(b.recommendation||'按自己的节奏阅读。')}</p><div class="sourcebox"><strong>${available?'可以直接阅读':'前往正版平台查找'}</strong><p class="sourcehint">${state.texts[id]?'你之前保存的正文仍可继续阅读。':PUBLIC[id]?(PUBLIC[id].language==='en'?'已内置英文原版全文，可直接阅读，并使用浏览器英语合成语音分段听读。语言难度是编辑建议，不是官方分级。':'已内置简体古典原文，无需导入。'+esc(PUBLIC[id].label)+'。'+(window.POETRY_GUIDES?.[id]?'逐篇提供关键词释义和导读，其中部分篇目有原创释义赏析；辅助导读不等同于逐句白话译文。':'本版提供公版原典正文，不含现代译文。')+'原文库不包含出版社现代注释。'):'本书尚无站内授权全文。点击下方按钮在微信读书按书名查找；是否上架及可读范围由平台决定，可能需要登录或购买。外部阅读进度由该平台保存，本应用无法读取。'}</p><div class="actions"><button id="read" class="primary">${available?(state.positions[id]?'继续上次位置':'直接阅读原文'):'去微信读书查找 ↗'}</button><button id="deleteBook" class="danger">删除此书</button></div>${available?`<p class="progressline">${esc(progressLabel(id)||'开始阅读后会自动记住章节与段落位置。')}</p>`:`<label class="sourcehint">我的阅读书签（可选）<input id="externalBookmark" placeholder="例如：第三章，第 42 页" value="${esc(bookmark)}" maxlength="300"></label>`}</div><label>阅读状态 <select id="bookStatus">${[['unread','未开始'],['reading','阅读中'],['done','已读完']].map(([v,t])=>`<option value="${v}" ${(state.statuses[id]||'unread')===v?'selected':''}>${t}</option>`).join('')}</select></label><h3 id="noteHeading">这本书的读后感</h3><textarea id="noteText" placeholder="记下触动你的句子、想法，以及它与你的联系…">${esc(n?.text||'')}</textarea><div class="actions"><button id="saveNote" class="primary">保存读后感</button><span id="noteHint" class="author">${n?'上次保存：'+new Date(n.updated).toLocaleString():'写在这里，会自动保存'}</span></div>`;
+  let explanation;
+  if(state.texts[id]) explanation='你之前保存的正文仍可继续阅读。';
+  else if(PUBLIC[id]?.language==='en') explanation='已内置英文原版全文，支持浏览器英语合成朗读。难度为编辑建议，不是官方分级。';
+  else if(PUBLIC[id]) explanation=PUBLIC[id].label+'。提供简体公版原文，不含出版社的现代译注。'+(window.POETRY_GUIDES?.[id]?'部分篇目有原创释义与赏析，其余为辅助导读，不等同于完整逐句译文。':'');
+  else explanation='尚未接入授权全文。可在微信读书按书名查找，是否上架及可读范围由平台决定，可能需要登录或购买；站外进度由该平台保存。';
+  $('#detailBody').innerHTML=`<section class="book-intro"><span class="tag">${esc(b.category)}</span><h2>${esc(b.title)}</h2><div class="author">${esc(b.author)}</div></section><section class="detail-section reading-entry"><div class="entry-heading"><h3>阅读</h3><span class="entry-status">${available?'站内原文':'正版平台'}</span></div><button id="read" class="primary">${available?(state.positions[id]?'继续上次阅读':'开始阅读'):'去微信读书查找 ↗'}</button>${available?`<p class="progressline">${esc(progressLabel(id)||'自动记住章节与段落位置')}</p>`:`<label class="sourcehint">阅读书签（可选）<input id="externalBookmark" placeholder="例如：第三章，第 42 页" value="${esc(bookmark)}" maxlength="300"></label>`}<details class="edition-note"><summary>版本与阅读说明</summary><p class="sourcehint">${esc(explanation)}</p></details></section><section class="detail-section"><h3>内容简介</h3><p>${esc(b.description)}</p><h3>推荐读法</h3><p>${esc(b.recommendation||'按自己的节奏阅读。')}</p></section><section class="detail-section"><label class="status-row">阅读状态<select id="bookStatus">${[['unread','未开始'],['reading','阅读中'],['done','已读完']].map(([v,t])=>`<option value="${v}" ${(state.statuses[id]||'unread')===v?'selected':''}>${t}</option>`).join('')}</select></label><h3 id="noteHeading">这本书的读后感</h3><textarea id="noteText" placeholder="记下触动你的句子、想法，以及它与你的联系…">${esc(n?.text||'')}</textarea><div class="note-actions"><button id="saveNote" class="primary">保存读后感</button><span id="noteHint" class="author">${n?'上次保存：'+new Date(n.updated).toLocaleString():'输入后自动保存'}</span></div></section><button id="deleteBook" class="danger remove-book">${TRASH_ICON} 移出书架</button>`;
+  $('#detailBody').scrollTop=0;
   $('#bookStatus').onchange=async e=>{state.statuses[id]=e.target.value;await persist();render();};
   const captureNote=()=>{state.notes[id]={text:$('#noteText').value,updated:new Date().toISOString()};};
   const saved=async()=>{if(await persist()){if(current?.id===id&&$('#noteHint'))$('#noteHint').textContent='已保存 · '+new Date().toLocaleTimeString();render();}};
@@ -120,7 +130,8 @@ function restorePosition(p) {
   const r=$('#reader');restoring=true;
   requestAnimationFrame(()=>{
     const para=p&&$('#readerText').querySelector(`[data-para="${Number(p.paragraph)||0}"]`);
-    if(para&&p.chapter){const top=readingTop(),rect=para.getBoundingClientRect();r.scrollTop+=rect.top-top+(p.fraction||0)*rect.height;}
+    if(p&&p.offset<8&&p.paragraph===0&&!(p.fraction>0))r.scrollTop=0;
+    else if(para&&p.chapter){const top=readingTop(),rect=para.getBoundingClientRect();r.scrollTop+=rect.top-top+(p.fraction||0)*rect.height;}
     else r.scrollTop=p?.offset||0;
     requestAnimationFrame(()=>{restoring=false;updateProgress();capturePosition();persist();render();});
   });
@@ -142,7 +153,9 @@ function paintChapter(index,p=null) {
   body.append(source);
   const controls=document.createElement('div');controls.className='actions';
   for(const [delta,label]of [[-1,'← 上一篇'],[1,'下一篇 →']]){const b=document.createElement('button');b.textContent=label;b.disabled=chapterIndex+delta<0||chapterIndex+delta>=chapters.length;b.onclick=()=>changeChapter(chapterIndex+delta);controls.append(b);}body.append(controls);
-  $('#chapterSelect').value=String(chapterIndex);restorePosition(p);
+  $('#chapterSelect').value=String(chapterIndex);
+  $('#readerPrev').disabled=chapterIndex===0;$('#readerNext').disabled=chapterIndex===chapters.length-1;
+  restorePosition(p);
 }
 function changeChapter(index) {capturePosition();paintChapter(index);requestAnimationFrame(()=>requestAnimationFrame(()=>{capturePosition();persist();render();}));}
 function openReader(id) {
@@ -162,6 +175,8 @@ function openReader(id) {
 function updateProgress() {const p=readerPosition();$('#progress').textContent=`${chapterIndex+1}/${bookChapters(readingId).length}篇 · 本篇 ${p?.percent||0}%`;}
 $('#reader').onscroll=()=>{if(restoring||!readingId)return;updateProgress();capturePosition();clearTimeout(scrollTimer);scrollTimer=setTimeout(persist,300);};
 $('#chapterSelect').onchange=e=>changeChapter(Number(e.target.value));
+$('#readerPrev').onclick=()=>{if(chapterIndex>0)changeChapter(chapterIndex-1);};
+$('#readerNext').onclick=()=>{if(chapterIndex<bookChapters(readingId).length-1)changeChapter(chapterIndex+1);};
 $('#fontSize').onchange=e=>{const p=readerPosition();$('#readerText').style.fontSize=e.target.value+'px';restorePosition(p);};
 $('#readerBack').onclick=async()=>{capturePosition();clearTimeout(scrollTimer);await persist();$('#reader').close();render();};
 $('#reader').addEventListener('cancel',capturePosition);
@@ -179,6 +194,9 @@ async function sync() {
     if(await persist()){render();if(n)toast('书架新增 '+n+' 本书');}
   }catch{ /* Keep the shelf available when a remote update is unavailable. */ }
 }
+$('#mobileCategory').innerHTML=['全部分类',...categories].map(c=>`<option value="${esc(c==='全部分类'?'':c)}">${esc(c)}</option>`).join('');
+$('#mobileCategory').onchange=e=>{category=e.target.value;render();};
+$('#filterToggle').onclick=()=>{const expanded=$('.toolbar').classList.toggle('expanded');$('#filterToggle').setAttribute('aria-expanded',String(expanded));updateFilterLabel();};
 $('#search').oninput=render;$('#statusFilter').onchange=render;$('#availabilityFilter').onchange=render;
 $('#englishShortcut').onclick=()=>{category='英语 · 口语听力阅读';$('#search').value='';$('#statusFilter').value='';$('#availabilityFilter').value='direct';render();$('#shelf').scrollIntoView({behavior:'smooth'});};
 $('#filters').onclick=e=>{if(e.target.dataset.cat!==undefined){category=e.target.dataset.cat;render();}};
@@ -252,9 +270,10 @@ function makeStudyPanel(id,chapter,index) {
 let speechRun=0,speakingParagraph=0,speechActive=false;
 function stopReadingSpeech() {
   speechRun++;speechActive=false;
+  $('#pauseSpeech').textContent='暂停';
   if('speechSynthesis'in window)window.speechSynthesis.cancel();
   document.querySelectorAll('.speaking').forEach(p=>p.classList.remove('speaking'));
-  if($('#speechHint'))$('#speechHint').textContent='浏览器合成语音 · 可点击正文段落从此处听起';
+  if($('#speechHint'))$('#speechHint').textContent='合成语音 · 点击正文段落可从此处听起';
 }
 function startReadingSpeech(start=0) {
   if(!('speechSynthesis'in window)||typeof SpeechSynthesisUtterance==='undefined'){toast('当前浏览器不支持朗读，请使用支持语音合成的浏览器');return;}
@@ -277,7 +296,9 @@ function startReadingSpeech(start=0) {
   next();
 }
 $('#speak').onclick=()=>startReadingSpeech();
-$('#pauseSpeech').onclick=()=>{if(!('speechSynthesis'in window))return;if(!speechActive)return toast('请先开始朗读');if(window.speechSynthesis.paused){window.speechSynthesis.resume();$('#speechHint').textContent='已继续朗读';}else{window.speechSynthesis.pause();$('#speechHint').textContent='已暂停，点击可继续';}};
+$('#pauseSpeech').onclick=()=>{if(!('speechSynthesis'in window))return;if(!speechActive)return toast('请先开始朗读');if(window.speechSynthesis.paused){window.speechSynthesis.resume();$('#pauseSpeech').textContent='暂停';$('#speechHint').textContent='已继续朗读';}else{window.speechSynthesis.pause();$('#pauseSpeech').textContent='继续';$('#speechHint').textContent='已暂停，点击可继续';}};
 $('#stopSpeech').onclick=stopReadingSpeech;
 $('#speechRate').onchange=()=>{if(speechActive)startReadingSpeech(speakingParagraph);};
 $('#reader').addEventListener('close',stopReadingSpeech);
+
+if('ResizeObserver'in window){new ResizeObserver(()=>{const height=$('.readerhead').getBoundingClientRect().height;if(height)$('#reader').style.setProperty('--reader-head-height',height+'px');}).observe($('.readerhead'));}

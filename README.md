@@ -119,6 +119,8 @@ The public edition stores each visitor’s bookshelf, progress, and reflections 
 
 ## A Place to Read and Reflect
 
+On phones, use a compact category picker, expandable filters, shorter book rows, and clear full-screen detail and reading views.
+
 Keep your place across reading sessions, write reflections alongside each book, and explore English classics with adjustable-speed synthesized narration and retelling prompts. The collection also includes simplified Chinese poetry and vocabulary notes, with original commentary on selected poems.
 
 Weekly additions expand the collection without automatically removing existing selections.

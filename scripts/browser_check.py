@@ -82,12 +82,56 @@ with tempfile.TemporaryDirectory(prefix='books-qa-') as t:
   assert cdp.evaluate("document.documentElement.scrollWidth<=innerWidth")
   pathlib.Path('/tmp/books-project-mobile.png').write_bytes(base64.b64decode(cdp.call('Page.captureScreenshot',{'format':'png'})['data']))
   cdp.call('Emulation.setDeviceMetricsOverride',{'width':1440,'height':1000,'deviceScaleFactor':1,'mobile':False})
+  # Mobile controls stay on one row; compact cards and all dialog surfaces fit.
+  for width,height in [(320,640),(360,740),(375,812),(390,844),(430,932),(768,1024)]:
+   cdp.call('Emulation.setDeviceMetricsOverride',{'width':width,'height':height,'deviceScaleFactor':1,'mobile':True})
+   time.sleep(.08)
+   assert cdp.evaluate("document.documentElement.scrollWidth<=innerWidth"),width
+   assert cdp.evaluate("getComputedStyle(document.querySelector('#filters')).display==='none'"),width
+   assert cdp.evaluate("document.querySelector('.mobile-filter-row').getBoundingClientRect().height<=50"),width
+   assert cdp.evaluate("getComputedStyle(document.querySelector('.cardbuttons [data-read]')).fontSize==='14px'"),width
+   if width<=600:assert cdp.evaluate("document.querySelector('.card').getBoundingClientRect().height<=220"),width
+   cdp.evaluate("document.querySelector('#mobileCategory').value='社会 · 思想 · 自我';document.querySelector('#mobileCategory').dispatchEvent(new Event('change'))")
+   cdp.wait("document.querySelectorAll('.card').length===6")
+   assert cdp.evaluate("hasText(document.querySelector('.card [data-read]').dataset.read)")
+   cdp.evaluate("document.querySelector('#filterToggle').click()")
+   assert cdp.evaluate("document.querySelector('#availabilityFilter').getBoundingClientRect().height>=40")
+   cdp.evaluate("document.querySelector('#filterToggle').click();document.querySelector('#mobileCategory').value='';document.querySelector('#mobileCategory').dispatchEvent(new Event('change'))")
+   cdp.wait("document.querySelectorAll('.card').length===68")
+   cdp.evaluate("document.querySelector('.card [data-book]').click()")
+   assert cdp.evaluate("document.querySelector('#detail').open&&document.querySelector('#detailBody').scrollWidth<=document.querySelector('#detailBody').clientWidth"),width
+   assert cdp.evaluate("document.querySelector('#detail .modalhead').getBoundingClientRect().top>=0"),width
+   cdp.evaluate("document.querySelector('#detail [data-close]').click();document.querySelector('#add').click()")
+   assert cdp.evaluate("document.querySelector('#addDialog').open&&document.querySelector('#addForm').scrollWidth<=document.querySelector('#addForm').clientWidth"),width
+   cdp.evaluate("document.querySelector('#addDialog [data-close]').click()")
+  cdp.call('Emulation.setDeviceMetricsOverride',{'width':390,'height':844,'deviceScaleFactor':1,'mobile':True})
+  cdp.evaluate("window.scrollTo(0,0)")
+  pathlib.Path('/tmp/books-mobile-library.png').write_bytes(base64.b64decode(cdp.call('Page.captureScreenshot',{'format':'png'})['data']))
+  cdp.evaluate("document.querySelector('.card [data-book]').click()")
+  pathlib.Path('/tmp/books-mobile-detail.png').write_bytes(base64.b64decode(cdp.call('Page.captureScreenshot',{'format':'png'})['data']))
+  cdp.evaluate("document.querySelector('#detail [data-close]').click();document.querySelector('#add').click()")
+  pathlib.Path('/tmp/books-mobile-add.png').write_bytes(base64.b64decode(cdp.call('Page.captureScreenshot',{'format':'png'})['data']))
+  cdp.evaluate("document.querySelector('#addDialog [data-close]').click()")
+  cdp.call('Emulation.setDeviceMetricsOverride',{'width':1440,'height':1000,'deviceScaleFactor':1,'mobile':False})
   assert cdp.evaluate("!document.querySelector('#notesTab')&&!document.querySelector('#settingsTab')&&!document.querySelector('#importText')")
   assert cdp.evaluate("document.querySelectorAll('[data-delete]').length===68")
   assert cdp.evaluate("getComputedStyle(document.documentElement).getPropertyValue('--green').trim()==='#0875d1'")
   cdp.evaluate("document.querySelector('[data-read=\"b001\"]').click()")
   cdp.wait("document.querySelector('#reader').open&&document.querySelector('#readerText p')&&state.positions.b001")
   assert cdp.evaluate("document.querySelector('#readerText').textContent.length>20")
+  for width,height in [(320,640),(375,812),(430,932)]:
+   cdp.call('Emulation.setDeviceMetricsOverride',{'width':width,'height':height,'deviceScaleFactor':1,'mobile':True});time.sleep(.1)
+   assert cdp.evaluate("document.querySelector('#reader').scrollWidth<=innerWidth"),width
+   assert cdp.evaluate("document.querySelector('.reader-nav').getBoundingClientRect().height<=65"),width
+   assert cdp.evaluate("document.querySelector('#readerPrev').disabled")
+   cdp.evaluate("document.querySelector('#readerNext').click()")
+   cdp.wait("document.querySelector('#chapterSelect').value==='1'")
+   cdp.evaluate("document.querySelector('#readerPrev').click()")
+   cdp.wait("document.querySelector('#chapterSelect').value==='0'")
+  cdp.call('Emulation.setDeviceMetricsOverride',{'width':390,'height':844,'deviceScaleFactor':1,'mobile':True});time.sleep(.1)
+  pathlib.Path('/tmp/books-mobile-reader.png').write_bytes(base64.b64decode(cdp.call('Page.captureScreenshot',{'format':'png'})['data']))
+  cdp.call('Emulation.setDeviceMetricsOverride',{'width':1440,'height':1000,'deviceScaleFactor':1,'mobile':False})
+
   cdp.evaluate("document.querySelector('#chapterSelect').value='1';document.querySelector('#chapterSelect').dispatchEvent(new Event('change'))")
   cdp.wait("state.positions.b001.chapter===PUBLIC_READING.b001.chapters[1].id")
   pathlib.Path('/tmp/books-project-reader.png').write_bytes(base64.b64decode(cdp.call('Page.captureScreenshot',{'format':'png'})['data']))
@@ -121,6 +165,12 @@ with tempfile.TemporaryDirectory(prefix='books-qa-') as t:
   cdp.evaluate("document.querySelector('[data-read=\"en001\"]').click()")
   cdp.wait("document.querySelector('#reader').open&&!document.querySelector('#speechControls').hidden")
   assert cdp.evaluate("document.querySelector('#readerText p[lang=en]').textContent.startsWith('Once upon a time')")
+  cdp.call('Emulation.setDeviceMetricsOverride',{'width':320,'height':640,'deviceScaleFactor':1,'mobile':True});time.sleep(.15)
+  assert cdp.evaluate("document.querySelector('#reader').scrollWidth<=innerWidth")
+  assert cdp.evaluate("document.querySelector('#speechControls').getBoundingClientRect().top>=document.querySelector('.readerhead').getBoundingClientRect().bottom-1")
+  pathlib.Path('/tmp/books-mobile-english.png').write_bytes(base64.b64decode(cdp.call('Page.captureScreenshot',{'format':'png'})['data']))
+  cdp.call('Emulation.setDeviceMetricsOverride',{'width':1440,'height':1000,'deviceScaleFactor':1,'mobile':False})
+
   assert cdp.evaluate("!!document.querySelector('.study')&&!!document.querySelector('#speak')")
   # Test speech dispatch without requiring an OS voice or producing audible output.
   assert cdp.evaluate("(()=>{let calls=0;const old=window.speechSynthesis.speak;window.speechSynthesis.speak=()=>calls++;document.querySelector('#speak').click();window.speechSynthesis.speak=old;document.querySelector('#stopSpeech').click();return calls===1;})()")
@@ -157,7 +207,7 @@ with tempfile.TemporaryDirectory(prefix='books-qa-') as t:
     assert other.evaluate("Object.keys(state.notes).length===0&&state.deleted.length===0&&Object.keys(state.positions).length===0")
    finally:other.close();browser.call('Target.disposeBrowserContext',{'browserContextId':context});browser.close()
    print('PASS: public build under /books_list/; browser-local persistence; separate visitor context has no first visitor notes/deletions/progress.')
-  print('PASS: 68 cards; six English full-text books and speech dispatch; no standalone notes/sync; blue theme; direct public reading; per-book chapter resume after reload; notes persisted; deletion persisted; 390px layout without horizontal overflow.')
+  print('PASS: six mobile widths, compact cards, dropdown filters, detail/add/reader screens and bottom chapter controls; 68 cards; six English full-text books and speech dispatch; no standalone notes/sync; blue theme; direct public reading; per-book chapter resume after reload; notes persisted; deletion persisted; 390px layout without horizontal overflow.')
  finally:
   if cdp:cdp.close()
   if chrome:chrome.terminate();chrome.wait(timeout=10)
