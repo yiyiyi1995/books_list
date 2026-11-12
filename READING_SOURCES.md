@@ -27,3 +27,7 @@ poetry-guides.js 含 42 篇原创简要释义与赏析，以及 604 篇明确标
 - Peter Rabbit 与 Happy Prince 来自 Project Gutenberg，完整来源文本及其许可保留于 sources/en001-source.txt、sources/en002-source.txt，阅读器亦链接原始来源。只使用旧版原文，不复制现代改写或译文。
 - 页面上的难度范围、阅读顺序和练习方法是本应用的编辑建议，不是 CEFR 官方分级或效果保证。经典原著存在古旧语言、方言或文字游戏。
 - 听读使用浏览器 SpeechSynthesis 合成语音，不是真人录音。不录音、不评分；可用英语音色取决于浏览器和设备。自动化验收仅检查朗读调用与交互，不验证发声质量。
+
+## 可立即阅读的公版原典拓展
+
+新增《诗经》《论语》《大学》《孟子》简体原文，保留原书单。数据来自 chinese-poetry/chinese-poetry（MIT），来源路径及 Git blob SHA 保留在 sources/alternatives-original.json，仅复制古代原文，未附现代译注。生成命令为 `python3 scripts/add_public_alternatives.py`。截至本次更新，主目录共 68 项，已内置 12 项文本；原书单中尚未接入全文的 56 项仍保留，不把新增原典标成这些书的同版全文。

@@ -1,6 +1,6 @@
 # 书间 · 私人阅读书房
 
-58 项原始书单加 6 本英文原版，共 64 项、8 个板块，电脑与手机响应式界面。无需安装第三方依赖。
+58 项原始书单加 6 本英文原版及 4 部公版原典，共 68 项、8 个板块，电脑与手机响应式界面。无需安装第三方依赖。
 
 ## 开始使用
 
@@ -53,3 +53,7 @@ catalog.json 是主书单，catalog.js 是供直接打开 HTML 使用的镜像�
 646 篇唐诗宋词统一简体。诗词下方有关键词词义、赏析读法和表达运用提示；42 篇为原创简要释义赏析，604 篇为明确标示的辅助导读，尚非全部逐句白话译文。来源、转换方法与许可见 READING_SOURCES.md。
 
 资源更新步骤：`python3 scripts/fetch_reading.py` → `python3 scripts/package_readings.py`（仅在获取英文原版内容后执行）；诗词转换与导读：`python3 scripts/simplify_chinese.py` → `python3 scripts/build_poetry_guides.py`。生成文件已提交，日常启动不需要网络或额外依赖。
+
+## 可立即阅读的公版原典拓展
+
+新增《诗经》《论语》《大学》《孟子》简体原文，保留原书单。数据来自 chinese-poetry/chinese-poetry（MIT），来源路径及 Git blob SHA 保留在 sources/alternatives-original.json，仅复制古代原文，未附现代译注。生成命令为 `python3 scripts/add_public_alternatives.py`。截至本次更新，主目录共 68 项，已内置 12 项文本；原书单中尚未接入全文的 56 项仍保留，不把新增原典标成这些书的同版全文。

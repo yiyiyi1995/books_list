@@ -48,7 +48,7 @@ class Handler(SimpleHTTPRequestHandler):
     with urllib.request.urlopen(req,timeout=15) as r:catalog=json.load(r)
     return self.reply(200,catalog)
    except Exception:return self.reply(502,{'error':'remote catalog unavailable'})
-  reading_asset=bool(re.fullmatch(r'/readings/en[0-9]{3}-[0-9]+\.js',path))
+  reading_asset=bool(re.fullmatch(r'/readings/(?:en|alt)[0-9]{3}-[0-9]+\.js',path))
   if not reading_asset and path not in ['/', '/index.html','/app.js','/style.css','/catalog.js','/catalog.json','/reading.js','/poetry-guides.js','/sources/en001-source.txt','/sources/en002-source.txt']:return self.reply(404,{'error':'not found'})
   return super().do_GET()
  def do_HEAD(self):self.reply(405,{'error':'not supported'})
