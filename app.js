@@ -61,14 +61,11 @@ function progressLabel(id) {
 function statusLabel(id) {return ({unread:'○ 未开始',reading:'◐ 阅读中',done:'● 已读完'})[state.statuses[id]||'unread'];}
 function render() {
   $('#count').textContent=state.books.length;
-  const readableCount=state.books.filter(b=>hasText(b.id)).length;
-  $('#readableSummary').textContent=readableCount+' 本可立即阅读 · 已置顶';
-  $('#topRead').textContent='立即查看这 '+readableCount+' 本 →';
   $('#filters').innerHTML=['全部',...categories].map(c=>`<button data-cat="${esc(c==='全部'?'':c)}" class="${category===(c==='全部'?'':c)?'active':''}">${esc(c)}</button>`).join('');
   const q=$('#search').value.trim().toLowerCase(),status=$('#statusFilter').value,availability=$('#availabilityFilter').value;
-  const books=state.books.filter(b=>(!category||b.category===category)&&(!availability||(availability==='direct'?hasText(b.id):!hasText(b.id)))&&(!status||(state.statuses[b.id]||'unread')===status)&&[b.title,b.author,b.description].join(' ').toLowerCase().includes(q)).sort((a,b)=>Number(hasText(b.id))-Number(hasText(a.id)));
+  const books=state.books.filter(b=>(!category||b.category===category)&&(!availability||(availability==='direct'?hasText(b.id):!hasText(b.id)))&&(!status||(state.statuses[b.id]||'unread')===status)&&[b.title,b.author,b.description].join(' ').toLowerCase().includes(q)).sort((a,b)=>(!category?categories.indexOf(a.category)-categories.indexOf(b.category):0)||Number(hasText(b.id))-Number(hasText(a.id)));
   $('#resultCount').textContent=`共 ${books.length} 本 · ${category||'全部板块'}`;
-  $('#grid').innerHTML=books.map(b=>`<article class="card"><div class="cardtop"><div class="cover" aria-hidden="true" style="--cover:${colors[Math.max(0,categories.indexOf(b.category))%colors.length]}">${esc(b.title)}</div><div><span class="tag">${esc(b.category)}</span><h3>${esc(b.title)}</h3><div class="author">${esc(b.author)}</div><span class="readbadge">${hasText(b.id)?'站内原文阅读':'尚未接入全文'}</span></div></div><p class="desc">${esc(b.description)}</p><div class="rec">推荐读法 · ${esc(b.recommendation||'从你感兴趣的章节开始。')}</div>${state.positions[b.id]?`<p class="progressline">${esc(progressLabel(b.id))}</p>`:''}<div class="cardfoot"><span>${statusLabel(b.id)}${state.notes[b.id]?.text?' · 已有读后感':''}</span><div class="cardbuttons"><button data-book="${esc(b.id)}">详情 / 读后感</button><button class="primary" data-read="${esc(b.id)}">${hasText(b.id)?(state.positions[b.id]?'继续阅读':'直接阅读'):'查找正版 ↗'}</button><button class="danger" data-delete="${esc(b.id)}" aria-label="删除《${esc(b.title)}》">删除</button></div></div></article>`).join('')||'<div class="empty">这里还没有符合条件的书。</div>';
+  $('#grid').innerHTML=books.map((b,index)=>`${!category&&(index===0||books[index-1].category!==b.category)?`<div class="category-heading"><h3>${esc(b.category)}</h3><span>${books.filter(x=>x.category===b.category).length} 本 · ${books.filter(x=>x.category===b.category&&hasText(x.id)).length} 本可直接阅读</span></div>`:''}<article class="card"><div class="cardtop"><div class="cover" aria-hidden="true" style="--cover:${colors[Math.max(0,categories.indexOf(b.category))%colors.length]}">${esc(b.title)}</div><div><span class="tag">${esc(b.category)}</span><h3>${esc(b.title)}</h3><div class="author">${esc(b.author)}</div><span class="readbadge">${hasText(b.id)?'站内原文阅读':'尚未接入全文'}</span></div></div><p class="desc">${esc(b.description)}</p><div class="rec">推荐读法 · ${esc(b.recommendation||'从你感兴趣的章节开始。')}</div>${state.positions[b.id]?`<p class="progressline">${esc(progressLabel(b.id))}</p>`:''}<div class="cardfoot"><span>${statusLabel(b.id)}${state.notes[b.id]?.text?' · 已有读后感':''}</span><div class="cardbuttons"><button data-book="${esc(b.id)}">详情 / 读后感</button><button class="primary" data-read="${esc(b.id)}">${hasText(b.id)?(state.positions[b.id]?'继续阅读':'直接阅读'):'查找正版 ↗'}</button><button class="danger" data-delete="${esc(b.id)}" aria-label="删除《${esc(b.title)}》">删除</button></div></div></article>`).join('')||'<div class="empty">这里还没有符合条件的书。</div>';
   const last=state.books.find(b=>b.id===state.lastBook);
   $('#resume').textContent=last?'继续阅读《'+last.title+'》 ↗':'开始一段阅读 ↗';
 }
@@ -182,7 +179,6 @@ async function sync() {
     if(await persist()){render();if(n)toast('书架新增 '+n+' 本书');}
   }catch{ /* Keep the shelf available when a remote update is unavailable. */ }
 }
-$('#publicShortcut').onclick=$('#topRead').onclick=()=>{category='';$('#search').value='';$('#statusFilter').value='';$('#availabilityFilter').value='direct';render();$('#shelf').scrollIntoView({behavior:'smooth'});};
 $('#search').oninput=render;$('#statusFilter').onchange=render;$('#availabilityFilter').onchange=render;
 $('#englishShortcut').onclick=()=>{category='英语 · 口语听力阅读';$('#search').value='';$('#statusFilter').value='';$('#availabilityFilter').value='direct';render();$('#shelf').scrollIntoView({behavior:'smooth'});};
 $('#filters').onclick=e=>{if(e.target.dataset.cat!==undefined){category=e.target.dataset.cat;render();}};
