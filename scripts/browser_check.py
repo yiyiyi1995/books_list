@@ -1,6 +1,7 @@
 """Browser acceptance checks with isolated temporary storage. Requires Chrome."""
 import base64,json,os,pathlib,secrets,socket,struct,subprocess,sys,tempfile,time,urllib.request
 ROOT=pathlib.Path(__file__).resolve().parents[1]
+STATIC='--static' in sys.argv
 N=len(json.loads((ROOT/'catalog.json').read_text())['books'])
 CHROME='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 http=urllib.request.build_opener(urllib.request.ProxyHandler({}))
@@ -54,15 +55,22 @@ class CDP:
  def close(self):self.s.close()
 with tempfile.TemporaryDirectory(prefix='books-qa-') as t:
  port,debug=free_port(),free_port();url=f'http://127.0.0.1:{port}'
+ if STATIC:
+  subprocess.run([sys.executable,str(ROOT/'scripts/build_public.py')],check=True,stdout=subprocess.DEVNULL)
+  public=pathlib.Path(t)/'public';public.mkdir();import shutil
+  shutil.copytree(ROOT/'dist',public/'books_list');url+='/books_list/'
  env={**os.environ,'BOOKS_DATA_DIR':t};env.pop('BOOKS_PASSWORD',None)
- server=subprocess.Popen([sys.executable,str(ROOT/'server.py'),'--port',str(port)],env=env,stdout=subprocess.DEVNULL)
+ command=[sys.executable,'-m','http.server',str(port),'--bind','127.0.0.1','--directory',str(public)]if STATIC else [sys.executable,str(ROOT/'server.py'),'--port',str(port)]
+ server=subprocess.Popen(command,env=env,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
  chrome=None;cdp=None
  try:
   wait_url(url)
   initial={'books':json.loads((ROOT/'catalog.json').read_text())['books'],'deleted':[],'notes':{},'texts':{},'positions':{},'statuses':{},'lastBook':None,'lastSync':'2099-01-01T00:00:00Z'}
-  req=urllib.request.Request(url+'/api/state',data=json.dumps({'state':initial,'revision':0}).encode(),method='PUT',headers={'Content-Type':'application/json'});http.open(req).read()
+  if not STATIC:
+   req=urllib.request.Request(url+'/api/state',data=json.dumps({'state':initial,'revision':0}).encode(),method='PUT',headers={'Content-Type':'application/json'});http.open(req).read()
   chrome=subprocess.Popen([CHROME,'--headless','--disable-gpu','--no-first-run','--no-default-browser-check','--user-data-dir='+t+'/chrome','--remote-debugging-port='+str(debug),'about:blank'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-  pages=json.load(wait_url(f'http://127.0.0.1:{debug}/json/list'));cdp=CDP(pages[0]['webSocketDebuggerUrl']);cdp.call('Page.enable');cdp.call('Page.navigate',{'url':url});cdp.wait("document.querySelectorAll('.card').length===68")
+  pages=json.load(wait_url(f'http://127.0.0.1:{debug}/json/list'));cdp=CDP(pages[0]['webSocketDebuggerUrl']);cdp.call('Page.enable');cdp.call('Network.enable');cdp.call('Network.setBlockedURLs',{'urls':['*raw.githubusercontent.com*']});cdp.call('Page.navigate',{'url':url});cdp.wait("document.querySelectorAll('.card').length===68")
+  if STATIC:assert cdp.evaluate("window.BOOKS_STATIC===true&&server===false&&!document.querySelector('#storageHint').hidden")
   assert cdp.evaluate("!document.querySelector('.quickread')&&document.querySelectorAll('.category-heading').length===8")
   assert cdp.evaluate("(()=>{const groups={};for(const card of document.querySelectorAll('.card')){const id=card.querySelector('[data-read]').dataset.read,b=state.books.find(b=>b.id===id);(groups[b.category]??=[]).push(hasText(id));}return Object.values(groups).every(g=>g.every((v,i)=>v||!g.slice(i+1).includes(true)));})()")
   cdp.call('Emulation.setDeviceMetricsOverride',{'width':1440,'height':1000,'deviceScaleFactor':1,'mobile':False})
@@ -137,6 +145,18 @@ with tempfile.TemporaryDirectory(prefix='books-qa-') as t:
   time.sleep(.2)
   shot=cdp.call('Page.captureScreenshot',{'format':'png'})
   pathlib.Path('/tmp/books-bright-desktop.png').write_bytes(base64.b64decode(shot['data']))
+  if STATIC:
+   browser=CDP(json.load(http.open(f'http://127.0.0.1:{debug}/json/version'))['webSocketDebuggerUrl'])
+   context=browser.call('Target.createBrowserContext')['browserContextId']
+   target=browser.call('Target.createTarget',{'url':'about:blank','browserContextId':context})['targetId']
+   info=next(x for x in json.load(http.open(f'http://127.0.0.1:{debug}/json/list'))if x['id']==target)
+   other=CDP(info['webSocketDebuggerUrl'])
+   try:
+    other.call('Page.enable');other.call('Network.enable');other.call('Network.setBlockedURLs',{'urls':['*raw.githubusercontent.com*']});other.call('Page.navigate',{'url':url})
+    other.wait("document.querySelectorAll('.card').length===68")
+    assert other.evaluate("Object.keys(state.notes).length===0&&state.deleted.length===0&&Object.keys(state.positions).length===0")
+   finally:other.close();browser.call('Target.disposeBrowserContext',{'browserContextId':context});browser.close()
+   print('PASS: public build under /books_list/; browser-local persistence; separate visitor context has no first visitor notes/deletions/progress.')
   print('PASS: 68 cards; six English full-text books and speech dispatch; no standalone notes/sync; blue theme; direct public reading; per-book chapter resume after reload; notes persisted; deletion persisted; 390px layout without horizontal overflow.')
  finally:
   if cdp:cdp.close()

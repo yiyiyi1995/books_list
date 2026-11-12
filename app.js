@@ -212,9 +212,10 @@ $('#restore').onchange=async e=>{
 async function init() {
   try{
     let saved;
-    if(location.protocol!=='file:')try{const r=await fetch('/api/state');if(r.ok&&r.headers.get('content-type')?.includes('application/json')){const d=await r.json();server=true;revision=d.revision;saved=d.state;}}catch{}
+    if(location.protocol!=='file:'&&!window.BOOKS_STATIC)try{const r=await fetch('/api/state');if(r.ok&&r.headers.get('content-type')?.includes('application/json')){const d=await r.json();server=true;revision=d.revision;saved=d.state;}}catch{}
     if(!server)saved=await localRead();if(saved)state={...state,...saved};
     mergeCatalog(INITIAL_CATALOG.books);await persist();render();
+    if(!server){$('#storageHint').hidden=false;$('#storageHint').textContent='书架、进度和读后感保存在此浏览器，换设备不会自动同步；请定期在页脚导出备份。';}
     if(!state.lastSync||Date.now()-Date.parse(state.lastSync)>7*86400000)sync();
   }catch(e){toast(e.message);render();}
 }

@@ -67,7 +67,7 @@ python3 server.py
 
 然后打开 **http://127.0.0.1:8765**。macOS 也可双击 `start.command` 启动。
 
-这是本地应用，GitHub 项目页不是在线阅读服务。服务需保持运行；当前未部署公网版本。
+公开在线版：https://yiyiyi1995.github.io/books_list/ 。在线版由 GitHub Pages 托管，不依赖个人电脑运行；每位访客的数据保存在各自浏览器中，不自动跨设备同步。以下启动方法适用于可选的本地 SQLite 版本。
 
 ### 在手机上使用
 
@@ -117,3 +117,7 @@ python3 scripts/browser_check.py
 正文来源、版本差异与许可详见 **[READING_SOURCES.md](../READING_SOURCES.md)**。古典原文来自 chinese-poetry，英文原版来自 Standard Ebooks / Project Gutenberg；简繁转换使用 OpenCC 字典。对应第三方许可保留在 `THIRD_PARTY_LICENSES.txt` 和 `sources/`。
 
 当前源码未声明项目级开源许可证。第三方文本与数据按各自许可使用；仓库公开不等于可以忽略作品的版权与版本限制。
+
+## 公网部署
+
+主分支更新时，deploy-pages.yml 自动构建并发布 GitHub Pages；每周书单工作流结束后也会触发发布。build_public.py 只复制白名单内的静态资源，排除个人数据库和服务代码。在线版以浏览器 IndexedDB 隔离访客数据，未提供账号或云端数据同步。

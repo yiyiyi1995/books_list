@@ -111,6 +111,12 @@ Highlights include *Three Hundred Tang Poems*, *Remarks on Ci Poetry*, *Sapiens*
 
 Readable selections appear first **within their own category**. The remaining 56 entries are reading-list selections with introductions and links to search for authorized editions; their full text is not hosted here. Classical originals do not include the modern annotations or translations of the selected print editions.
 
+## Read Online
+
+**[Open Books in your browser](https://yiyiyi1995.github.io/books_list/)** — works on phones and computers without keeping the owner’s computer running.
+
+The public edition stores each visitor’s bookshelf, progress, and reflections in that visitor’s browser. It does not share the owner’s local database, provide accounts, or automatically sync records across devices. Use the footer backup tools before clearing browser storage.
+
 ## A Place to Read and Reflect
 
 Keep your place across reading sessions, write reflections alongside each book, and explore English classics with adjustable-speed synthesized narration and retelling prompts. The collection also includes simplified Chinese poetry and vocabulary notes, with original commentary on selected poems.
@@ -126,4 +132,4 @@ Weekly additions expand the collection without automatically removing existing s
 
 </details>
 
-[Text sources and editions](READING_SOURCES.md) · [How to use the app](docs/SETUP.md)
+[Read online](https://yiyiyi1995.github.io/books_list/) · [Text sources and editions](READING_SOURCES.md) · [How to use the app](docs/SETUP.md)
