@@ -1,0 +1,100 @@
+{
+  "books": [
+    {
+      "id": "wk001",
+      "title": "古诗十九首集释",
+      "author": "隋树森 集释",
+      "category": "诗词 · 唐诗宋词",
+      "description": "汇集《古诗十九首》的注释与评说。",
+      "recommendation": "体会汉代文人诗的语言与生命意识。"
+    },
+    {
+      "id": "wk002",
+      "title": "边城",
+      "author": "沈从文",
+      "category": "心灵与中文文学",
+      "description": "以湘西小城的生活与情感展开的小说。",
+      "recommendation": "与《湘行散记》对照阅读。"
+    },
+    {
+      "id": "wk003",
+      "title": "中国大历史",
+      "author": "黄仁宇",
+      "category": "历史 · 中国",
+      "description": "以宏观视角梳理中国历史的结构与演变。",
+      "recommendation": "与《万历十五年》的微观切口比较。"
+    },
+    {
+      "id": "wk004",
+      "title": "乡土中国",
+      "author": "费孝通",
+      "category": "社会 · 思想 · 自我",
+      "description": "从社会学概念理解中国乡土社会。",
+      "recommendation": "结合具体生活经验理解差序格局。"
+    },
+    {
+      "id": "wk005",
+      "title": "昨日的世界",
+      "author": "斯蒂芬·茨威格",
+      "category": "历史 · 世界",
+      "description": "从个人记忆回望欧洲社会的时代变迁。",
+      "recommendation": "将个人经验与世界史时间线对应。"
+    },
+    {
+      "id": "wk006",
+      "title": "中国是部金融史",
+      "author": "陈雨露、杨栋",
+      "category": "历史 · 中国",
+      "description": "从货币与金融视角叙述中国历史。",
+      "recommendation": "与政治制度史交叉阅读。"
+    },
+    {
+      "id": "wk007",
+      "title": "草叶集",
+      "author": "沃尔特·惠特曼",
+      "category": "近现代诗文 · 中外",
+      "description": "以自由诗歌咏个体、自然与生命。",
+      "recommendation": "比较其自由诗节奏与中国现代诗。"
+    },
+    {
+      "id": "wk008",
+      "title": "美的历程",
+      "author": "李泽厚",
+      "category": "中外对照 · 年份对接",
+      "description": "从历史进程讨论中国艺术与审美。",
+      "recommendation": "将艺术风格与历史阶段相互对应。"
+    },
+    {
+      "id": "wk009",
+      "title": "谈美",
+      "author": "朱光潜",
+      "category": "社会 · 思想 · 自我",
+      "description": "以通俗文字介绍审美与艺术问题。",
+      "recommendation": "结合诗词阅读思考审美经验。"
+    },
+    {
+      "id": "wk010",
+      "title": "呼兰河传",
+      "author": "萧红",
+      "category": "心灵与中文文学",
+      "description": "以童年记忆描绘小城风物与人生。",
+      "recommendation": "留意日常叙事中的温度与悲凉。"
+    },
+    {
+      "id": "wk011",
+      "title": "诗经译注",
+      "author": "程俊英 译注",
+      "category": "诗词 · 唐诗宋词",
+      "description": "通过译注阅读《诗经》的风物与情感。",
+      "recommendation": "作为唐宋诗词之前的源头拓展。"
+    },
+    {
+      "id": "wk012",
+      "title": "海风中失落的血色馈赠",
+      "author": "阿利斯泰尔·麦克劳德",
+      "category": "心灵与中文文学",
+      "description": "书写海岛生活、家庭与记忆的小说集。",
+      "recommendation": "关注地域与代际关系的表达。"
+    }
+  ]
+}

@@ -1,0 +1,469 @@
+{
+  "version": 1,
+  "books": [
+    {
+      "id": "b001",
+      "title": "唐诗三百首（金性尧注本）",
+      "author": "蘅塘退士 编 / 金性尧 注",
+      "category": "诗词 · 唐诗宋词",
+      "description": "经典唐诗选本，以注释帮助理解语义与典故。",
+      "recommendation": "适合作为唐诗阅读起点，先读熟悉的名篇。"
+    },
+    {
+      "id": "b002",
+      "title": "唐诗鉴赏辞典",
+      "author": "上海辞书出版社 编",
+      "category": "诗词 · 唐诗宋词",
+      "description": "汇集唐诗作品及鉴赏文字。",
+      "recommendation": "与选本搭配，读一首查一篇赏析。"
+    },
+    {
+      "id": "b003",
+      "title": "宋词三百首",
+      "author": "上彊村民 编",
+      "category": "诗词 · 唐诗宋词",
+      "description": "收录宋词名篇的传统选本。",
+      "recommendation": "从小令入手，体会词的声情与意境。"
+    },
+    {
+      "id": "b004",
+      "title": "宋诗选注",
+      "author": "钱钟书 选注",
+      "category": "诗词 · 唐诗宋词",
+      "description": "以选诗与注释呈现宋诗的多样面貌。",
+      "recommendation": "适合在唐诗之外认识宋人的思理与日常。"
+    },
+    {
+      "id": "b005",
+      "title": "唐宋词十七讲",
+      "author": "叶嘉莹",
+      "category": "诗词 · 唐诗宋词",
+      "description": "从作品细读进入唐宋词的艺术世界。",
+      "recommendation": "适合慢读，边读讲解边重读原词。"
+    },
+    {
+      "id": "b006",
+      "title": "叶嘉莹说杜甫诗",
+      "author": "叶嘉莹",
+      "category": "诗词 · 唐诗宋词",
+      "description": "结合诗人生平与文本解读杜甫诗作。",
+      "recommendation": "与杜诗原文对照阅读。"
+    },
+    {
+      "id": "b007",
+      "title": "蒋勋说唐诗",
+      "author": "蒋勋",
+      "category": "诗词 · 唐诗宋词",
+      "description": "以审美感受与文化视角讲述唐诗。",
+      "recommendation": "适合轻松进入唐诗的情感与画面。"
+    },
+    {
+      "id": "b008",
+      "title": "长安客",
+      "author": "北溟鱼",
+      "category": "诗词 · 唐诗宋词",
+      "description": "借唐代诗人的经历描绘长安与人生际遇。",
+      "recommendation": "把诗作放回人物与时代中阅读。"
+    },
+    {
+      "id": "b009",
+      "title": "戴老师魔性诗词课",
+      "author": "戴建业",
+      "category": "诗词 · 唐诗宋词",
+      "description": "用通俗鲜活的语言讲解古典诗词。",
+      "recommendation": "适合建立兴趣后回到原诗细读。"
+    },
+    {
+      "id": "b010",
+      "title": "人间词话",
+      "author": "王国维",
+      "category": "诗词 · 唐诗宋词",
+      "description": "以词话形式讨论境界与文学审美。",
+      "recommendation": "结合具体词作思考其审美判断。"
+    },
+    {
+      "id": "b011",
+      "title": "苏东坡传",
+      "author": "林语堂",
+      "category": "诗词 · 唐诗宋词",
+      "description": "以苏轼的人生经历呈现其性情与精神世界。",
+      "recommendation": "与苏轼诗词交叉阅读。"
+    },
+    {
+      "id": "b012",
+      "title": "野草",
+      "author": "鲁迅",
+      "category": "近现代诗文 · 中外",
+      "description": "以散文诗探索个体、现实与精神困境。",
+      "recommendation": "逐篇慢读，记录意象带来的感受。"
+    },
+    {
+      "id": "b013",
+      "title": "湘行散记",
+      "author": "沈从文",
+      "category": "近现代诗文 · 中外",
+      "description": "记录湘西行旅中的人物与风物。",
+      "recommendation": "关注叙述中温柔与沉痛并存的目光。"
+    },
+    {
+      "id": "b014",
+      "title": "人间草木",
+      "author": "汪曾祺",
+      "category": "近现代诗文 · 中外",
+      "description": "围绕草木、食物与生活趣味的散文。",
+      "recommendation": "适合日常短读，练习观察生活。"
+    },
+    {
+      "id": "b015",
+      "title": "云雀叫了一整天",
+      "author": "木心",
+      "category": "近现代诗文 · 中外",
+      "description": "以诗歌呈现机智、记忆与独特的语言感。",
+      "recommendation": "挑选喜欢的诗反复读。"
+    },
+    {
+      "id": "b016",
+      "title": "海子的诗",
+      "author": "海子",
+      "category": "近现代诗文 · 中外",
+      "description": "围绕土地、生命与理想展开诗意表达。",
+      "recommendation": "比较其抒情短诗与更长的作品。"
+    },
+    {
+      "id": "b017",
+      "title": "北岛诗选",
+      "author": "北岛",
+      "category": "近现代诗文 · 中外",
+      "description": "以凝练的意象与语言回应个体经验。",
+      "recommendation": "读后写下自己的理解，不急于寻找唯一答案。"
+    },
+    {
+      "id": "b018",
+      "title": "守夜人：余光中诗选",
+      "author": "余光中",
+      "category": "近现代诗文 · 中外",
+      "description": "从乡愁、记忆与现代生活进入诗歌世界。",
+      "recommendation": "留意声音、节奏与语言的转换。"
+    },
+    {
+      "id": "b019",
+      "title": "飞鸟集·新月集",
+      "author": "[印]泰戈尔 / 郑振铎 译",
+      "category": "近现代诗文 · 中外",
+      "description": "以短诗与儿童视角描写自然和人生。",
+      "recommendation": "适合每日读几首并记录触动。"
+    },
+    {
+      "id": "b020",
+      "title": "给青年诗人的信",
+      "author": "[奥]里尔克 / 冯至 译",
+      "category": "近现代诗文 · 中外",
+      "description": "围绕写作、孤独与成长的书信。",
+      "recommendation": "带着自己的创作与生活问题阅读。"
+    },
+    {
+      "id": "b021",
+      "title": "万物静默如谜",
+      "author": "[波]辛波斯卡 / 陈黎 译",
+      "category": "近现代诗文 · 中外",
+      "description": "以日常切口与反讽追问世界。",
+      "recommendation": "关注诗中视角如何发生转折。"
+    },
+    {
+      "id": "b022",
+      "title": "二十首情诗和一首绝望的歌",
+      "author": "[智]聂鲁达 / 李宗荣 译",
+      "category": "近现代诗文 · 中外",
+      "description": "围绕爱情、感官与失落展开的诗集。",
+      "recommendation": "留意自然意象如何承载情感。"
+    },
+    {
+      "id": "b023",
+      "title": "当你老了：叶芝诗选",
+      "author": "[爱]叶芝 / 袁可嘉 译",
+      "category": "近现代诗文 · 中外",
+      "description": "呈现爱情、岁月与精神追寻的诗歌。",
+      "recommendation": "结合写作背景体会意象的层次。"
+    },
+    {
+      "id": "b024",
+      "title": "二十亿光年的孤独",
+      "author": "[日]谷川俊太郎 / 田原 译",
+      "category": "近现代诗文 · 中外",
+      "description": "以清澈语言探索宇宙、日常与孤独。",
+      "recommendation": "适合朗读，感受朴素语言里的张力。"
+    },
+    {
+      "id": "b025",
+      "title": "中国历代政治得失",
+      "author": "钱穆",
+      "category": "历史 · 中国",
+      "description": "讨论中国历代政治制度的演变与得失。",
+      "recommendation": "比较不同时代的制度条件。"
+    },
+    {
+      "id": "b026",
+      "title": "万历十五年",
+      "author": "黄仁宇",
+      "category": "历史 · 中国",
+      "description": "以明代人物与事件观察帝国制度的运行。",
+      "recommendation": "思考人物选择与制度约束的关系。"
+    },
+    {
+      "id": "b027",
+      "title": "显微镜下的大明",
+      "author": "马伯庸",
+      "category": "历史 · 中国",
+      "description": "从基层档案与具体纠纷观察明代社会。",
+      "recommendation": "适合从小事件进入历史。"
+    },
+    {
+      "id": "b028",
+      "title": "大明王朝的七张面孔",
+      "author": "张宏杰",
+      "category": "历史 · 中国",
+      "description": "借明代人物讨论权力、性格与时代。",
+      "recommendation": "可与其他明史读物互相参照。"
+    },
+    {
+      "id": "b029",
+      "title": "讲谈社·中国的历史（全10卷）",
+      "author": "宫本一夫 等",
+      "category": "历史 · 中国",
+      "description": "多位学者书写的中国历史系列。",
+      "recommendation": "按时代阅读，建立整体时间框架。"
+    },
+    {
+      "id": "b030",
+      "title": "秦制两千年",
+      "author": "张明扬",
+      "category": "历史 · 中国",
+      "description": "从人物与事件讨论传统政治的延续性。",
+      "recommendation": "留意作者论点与史料之间的关系。"
+    },
+    {
+      "id": "b031",
+      "title": "康熙的红票",
+      "author": "孙立天",
+      "category": "历史 · 中国",
+      "description": "通过清代跨文化交往观察政治与宗教关系。",
+      "recommendation": "关注不同参与者的立场。"
+    },
+    {
+      "id": "b032",
+      "title": "秦汉史讲义",
+      "author": "秦晖",
+      "category": "历史 · 中国",
+      "description": "围绕秦汉社会与制度展开历史讨论。",
+      "recommendation": "搭配基础通史，厘清概念。"
+    },
+    {
+      "id": "b033",
+      "title": "大明最后的使臣",
+      "author": "苗子兮",
+      "category": "历史 · 中国",
+      "description": "围绕明末使臣与时代变局展开叙事。",
+      "recommendation": "结合晚明时间线阅读。"
+    },
+    {
+      "id": "b034",
+      "title": "翦商",
+      "author": "李硕",
+      "category": "历史 · 中国",
+      "description": "结合考古与文献讨论商周之变。",
+      "recommendation": "区分考古发现、史料记载与解释。"
+    },
+    {
+      "id": "b035",
+      "title": "食南之徒",
+      "author": "马伯庸",
+      "category": "历史 · 中国",
+      "description": "借汉代背景与饮食题材展开的历史小说。",
+      "recommendation": "从故事进入时代，再查阅史实。"
+    },
+    {
+      "id": "b036",
+      "title": "长安的荔枝",
+      "author": "马伯庸",
+      "category": "历史 · 中国",
+      "description": "以荔枝转运任务描绘唐代官场与小人物。",
+      "recommendation": "留意任务链条中的成本与责任。"
+    },
+    {
+      "id": "b037",
+      "title": "明朝那些事儿",
+      "author": "当年明月",
+      "category": "历史 · 中国",
+      "description": "以通俗叙事介绍明代历史人物与事件。",
+      "recommendation": "作为兴趣入口，配合严肃史著。"
+    },
+    {
+      "id": "b038",
+      "title": "极简欧洲史",
+      "author": "约翰·赫斯特",
+      "category": "历史 · 世界",
+      "description": "以简明结构梳理欧洲历史脉络。",
+      "recommendation": "适合建立欧洲史的初步框架。"
+    },
+    {
+      "id": "b039",
+      "title": "人类简史",
+      "author": "尤瓦尔·赫拉利",
+      "category": "历史 · 世界",
+      "description": "以宏观视角讨论人类社会的发展。",
+      "recommendation": "把宏观解释当作讨论起点。"
+    },
+    {
+      "id": "b040",
+      "title": "枪炮、病菌与钢铁",
+      "author": "贾雷德·戴蒙德",
+      "category": "历史 · 世界",
+      "description": "从地理与环境讨论社会发展的差异。",
+      "recommendation": "与其他历史解释比较阅读。"
+    },
+    {
+      "id": "b041",
+      "title": "丝绸之路",
+      "author": "彼得·弗兰科潘",
+      "category": "历史 · 世界",
+      "description": "以欧亚交流网络重新观察世界史。",
+      "recommendation": "配合地图理解贸易与权力的联系。"
+    },
+    {
+      "id": "b042",
+      "title": "全球通史",
+      "author": "斯塔夫里阿诺斯",
+      "category": "历史 · 世界",
+      "description": "从全球联系视角叙述人类历史。",
+      "recommendation": "用作时间与地区对照的底图。"
+    },
+    {
+      "id": "b043",
+      "title": "文明的故事（全11卷）",
+      "author": "威尔·杜兰特",
+      "category": "历史 · 世界",
+      "description": "跨越多地区的文明史系列。",
+      "recommendation": "分卷阅读，留意写作时代的视角。"
+    },
+    {
+      "id": "b044",
+      "title": "罗马人的故事（全15卷）",
+      "author": "盐野七生",
+      "category": "历史 · 世界",
+      "description": "以叙事方式讲述罗马兴衰。",
+      "recommendation": "配合地图与年表，区分叙述与史学争议。"
+    },
+    {
+      "id": "b045",
+      "title": "中外历史年表",
+      "author": "翦伯赞 主编",
+      "category": "中外对照 · 年份对接",
+      "description": "以年代对应中国与世界历史事件。",
+      "recommendation": "阅读历史时随手查阅同一时代。"
+    },
+    {
+      "id": "b046",
+      "title": "DK时间线上的全球史",
+      "author": "英国DK公司",
+      "category": "中外对照 · 年份对接",
+      "description": "以视觉时间线串联全球历史。",
+      "recommendation": "适合快速定位事件及其先后关系。"
+    },
+    {
+      "id": "b047",
+      "title": "万古江河",
+      "author": "许倬云",
+      "category": "中外对照 · 年份对接",
+      "description": "从文化发展与交流观察中国历史。",
+      "recommendation": "思考地方经验与世界联系。"
+    },
+    {
+      "id": "b048",
+      "title": "历史大脉络",
+      "author": "许倬云",
+      "category": "中外对照 · 年份对接",
+      "description": "以宏观尺度讨论人类社会的演变。",
+      "recommendation": "读后自己画一条时间线。"
+    },
+    {
+      "id": "b049",
+      "title": "枢纽：3000年的中国",
+      "author": "施展",
+      "category": "中外对照 · 年份对接",
+      "description": "从地理与结构关系讨论中国历史。",
+      "recommendation": "结合地图检视作者的分析框架。"
+    },
+    {
+      "id": "b050",
+      "title": "世界作为参考答案",
+      "author": "刘擎、严飞",
+      "category": "社会 · 思想 · 自我",
+      "description": "从思想与社会观察回应现实生活的问题。",
+      "recommendation": "带着具体问题阅读并比较不同观点。"
+    },
+    {
+      "id": "b051",
+      "title": "哲学家的最后一课",
+      "author": "朱锐",
+      "category": "社会 · 思想 · 自我",
+      "description": "围绕生命与哲学思考展开表达。",
+      "recommendation": "记录书中问题与你生活的联系。"
+    },
+    {
+      "id": "b052",
+      "title": "认知觉醒",
+      "author": "周岭",
+      "category": "社会 · 思想 · 自我",
+      "description": "讨论认知、习惯与个人成长的方法。",
+      "recommendation": "选择一个可实践的方法并持续记录。"
+    },
+    {
+      "id": "b053",
+      "title": "蛤蟆先生去看心理医生",
+      "author": "[英]罗伯特·戴博德",
+      "category": "心灵与中文文学",
+      "description": "借寓言式故事呈现心理咨询与自我理解。",
+      "recommendation": "关注人物如何觉察情绪与关系。"
+    },
+    {
+      "id": "b054",
+      "title": "我与地坛",
+      "author": "史铁生",
+      "category": "心灵与中文文学",
+      "description": "围绕生命、亲情与存在展开的散文。",
+      "recommendation": "慢读并记录与你经历共鸣的段落。"
+    },
+    {
+      "id": "b055",
+      "title": "希腊别传",
+      "author": "陈嘉映",
+      "category": "心灵与中文文学",
+      "description": "以历史与思想叙述走近古希腊。",
+      "recommendation": "与希腊哲学入门读物相互参照。"
+    },
+    {
+      "id": "b056",
+      "title": "活着",
+      "author": "余华",
+      "category": "心灵与中文文学",
+      "description": "以普通人的命运呈现苦难与生存。",
+      "recommendation": "关注叙述的克制与人物的韧性。"
+    },
+    {
+      "id": "b057",
+      "title": "平凡的世界",
+      "author": "路遥",
+      "category": "心灵与中文文学",
+      "description": "书写社会变迁中普通人的生活与追求。",
+      "recommendation": "留意人物选择背后的时代条件。"
+    },
+    {
+      "id": "b058",
+      "title": "三体",
+      "author": "刘慈欣",
+      "category": "心灵与中文文学",
+      "description": "围绕文明接触、宇宙与人类命运展开科幻叙事。",
+      "recommendation": "在情节之外思考文明间的信任与选择。"
+    }
+  ]
+}
