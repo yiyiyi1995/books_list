@@ -48,7 +48,7 @@ class Handler(SimpleHTTPRequestHandler):
     with urllib.request.urlopen(req,timeout=15) as r:catalog=json.load(r)
     return self.reply(200,catalog)
    except Exception:return self.reply(502,{'error':'remote catalog unavailable'})
-  if path not in ['/', '/index.html','/app.js','/style.css','/catalog.js','/catalog.json']:return self.reply(404,{'error':'not found'})
+  if path not in ['/', '/index.html','/app.js','/style.css','/catalog.js','/catalog.json','/reading.js']:return self.reply(404,{'error':'not found'})
   return super().do_GET()
  def do_HEAD(self):self.reply(405,{'error':'not supported'})
  def body(self,limit=40*1024*1024):
